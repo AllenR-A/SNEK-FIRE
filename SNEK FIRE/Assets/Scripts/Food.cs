@@ -24,8 +24,10 @@ public class Food : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //if (other.tag == "Snake") {
+        if (other.tag == "Player") {
             RandomLocation();
-        //}
+        } else if (other.tag == "Wall") {       //still spawns on top of the wall sprite. might have to check on that Physics2D.BoxCast thing  (also found a "Collider2D.Cast" thing but I'm not sure how this one wors either)
+            RandomLocation();
+        }
     }
 }

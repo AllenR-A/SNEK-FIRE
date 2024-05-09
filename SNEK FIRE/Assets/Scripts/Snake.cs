@@ -55,4 +55,10 @@ public class Snake : MonoBehaviour
             0.0f
             );
     }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Wall"){
+            Debug.Log("YOU DIED.");
+        }
+    }
 }

@@ -8,11 +8,14 @@ public class Snake : MonoBehaviour
     [SerializeField] private float verticalInput;
     //[SerializeField] private float speed = 30.0f;
     private Vector2 direction = Vector2.right;          //go right by default
+    private List<Transform> bodyparts;
+    public Transform bodyPrefab;
 
     // Start is called before the first frame update
     private void Start()
     {
-        
+        bodyparts = new List<Transform>();
+        bodyparts.Add(this.transform);
     }
 
     // Update is called once per frame
@@ -49,6 +52,9 @@ public class Snake : MonoBehaviour
 
     private void FixedUpdate()
     {
+        for (int i = bodyparts.Count - 1; i > 0; i--) {
+            bodyparts[i].position = bodyparts[i - 1].position;
+        }
         this.transform.position = new Vector3(
             this.transform.position.x + direction.x,
             this.transform.position.y + direction.y,
@@ -59,6 +65,17 @@ public class Snake : MonoBehaviour
     {
         if (other.tag == "Wall"){
             Debug.Log("YOU DIED.");
+        } else if (other.tag == "Food"){
+            Grow();
+        } else if (other.tag == "Player"){
+            Debug.Log("YOU CRASHED ON YOURSELF.");
         }
+    }
+
+    private void Grow(){
+        Transform bodypart = Instantiate(this.bodyPrefab);              // spawn new bodypart
+        bodypart.position = bodyparts[bodyparts.Count - 1].position;    // set transform of new bodypart to the old one
+        bodyparts.Add(bodypart);                                        // add this to the list of bodyparts
+
     }
 }

@@ -5313,6 +5313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   horizontalInput: 0
   verticalInput: 0
+  bodyPrefab: {fileID: 4770450307657190208, guid: 5e038a1452b0b1146ae5aa89106636de, type: 3}
 --- !u!1 &1980003960
 GameObject:
   m_ObjectHideFlags: 0

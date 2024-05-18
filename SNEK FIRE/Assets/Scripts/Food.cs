@@ -5,10 +5,24 @@ using UnityEngine;
 public class Food : MonoBehaviour
 {
     public BoxCollider2D area;
+    public Vector2 spawnPosition; // Position where you want to spawn the item
+    public Vector2 boxSize; // Size of the box cast
+    public float boxAngle = 0f; // Angle of the box cast in degrees
+    private LayerMask layerMask; // Layer mask to define which layers to check against
+
+    bool CanSpawnItem(Vector2 position, Vector2 size, float angle)
+    {
+        // Perform the BoxCast
+        RaycastHit2D hit = Physics2D.BoxCast(position, size, angle, Vector2.zero, 0f, layerMask);
+        
+        // Return true if no collider was hit, false otherwise
+        return hit.collider == null;
+    }
 
     // Start is called before the first frame update
     private void Start()
     {
+        layerMask = LayerMask.GetMask("Obstacles");
         RandomLocation();
     }
 
@@ -16,10 +30,17 @@ public class Food : MonoBehaviour
     {
         Bounds bounds = this.area.bounds;
 
-        float x = Random.Range(bounds.min.x, bounds.max.x);
-        float y = Random.Range(bounds.min.y, bounds.max.y);
+        float x = Mathf.Round(Random.Range(bounds.min.x, bounds.max.x));
+        float y = Mathf.Round(Random.Range(bounds.min.y, bounds.max.y));
 
-        this.transform.position = new Vector3(Mathf.Round(x), Mathf.Round(y), 0);   //rounded comply within the grid
+        spawnPosition = new Vector2(x,y);
+        boxSize = new Vector2(1,1);
+
+        if (CanSpawnItem(spawnPosition, boxSize, boxAngle)) {
+            this.transform.position = new Vector3(x, y, 0);   //rounded comply within the grid
+        } else {
+            RandomLocation();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)

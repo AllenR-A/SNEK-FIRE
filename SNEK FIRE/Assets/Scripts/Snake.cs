@@ -11,6 +11,7 @@ public class Snake : MonoBehaviour
     private List<Transform> bodyparts;
     public Transform bodyPrefab;
     private bool alive = true;
+    private bool attacking;
 
     // Start is called before the first frame update
     private void Start()

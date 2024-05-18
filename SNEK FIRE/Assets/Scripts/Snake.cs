@@ -10,6 +10,7 @@ public class Snake : MonoBehaviour
     private Vector2 direction = Vector2.right;          //go right by default
     private List<Transform> bodyparts;
     public Transform bodyPrefab;
+    private bool alive = true;
 
     // Start is called before the first frame update
     private void Start()
@@ -52,19 +53,22 @@ public class Snake : MonoBehaviour
 
     private void FixedUpdate()
     {
-        for (int i = bodyparts.Count - 1; i > 0; i--) {
-            bodyparts[i].position = bodyparts[i - 1].position;
+        if (alive) {
+            for (int i = bodyparts.Count - 1; i > 0; i--) {
+                bodyparts[i].position = bodyparts[i - 1].position;
+            }
+            this.transform.position = new Vector3(
+                this.transform.position.x + direction.x,
+                this.transform.position.y + direction.y,
+                0.0f
+                );
         }
-        this.transform.position = new Vector3(
-            this.transform.position.x + direction.x,
-            this.transform.position.y + direction.y,
-            0.0f
-            );
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Wall"){
             Debug.Log("YOU DIED.");
+            alive = false;
         } else if (other.tag == "Food"){
             Grow();
         } else if (other.tag == "Player"){

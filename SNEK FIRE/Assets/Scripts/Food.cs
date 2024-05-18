@@ -8,7 +8,7 @@ public class Food : MonoBehaviour
     public Vector2 spawnPosition; // Position where you want to spawn the item
     public Vector2 boxSize; // Size of the box cast
     public float boxAngle = 0f; // Angle of the box cast in degrees
-    private LayerMask layerMask; // Layer mask to define which layers to check against
+    public LayerMask layerMask; // Layer mask to define which layers to check against
 
     bool CanSpawnItem(Vector2 position, Vector2 size, float angle)
     {
@@ -22,7 +22,7 @@ public class Food : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        layerMask = LayerMask.GetMask("Obstacles");
+        //layerMask = LayerMask.GetMask("Obstacles");
         RandomLocation();
     }
 

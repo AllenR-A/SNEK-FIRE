@@ -714,6 +714,9 @@ MonoBehaviour:
   spawnPosition: {x: 0, y: 0}
   boxSize: {x: 0, y: 0}
   boxAngle: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &209950585
 GameObject:
   m_ObjectHideFlags: 0
@@ -6458,8 +6461,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501ca5339471b104ea0201dde1fa24f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalInput: 0
-  verticalInput: 0
   bodyPrefab: {fileID: 4770450307657190208, guid: 5e038a1452b0b1146ae5aa89106636de, type: 3}
 --- !u!95 &1611188118
 Animator:

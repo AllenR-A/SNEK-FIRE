@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Snake : MonoBehaviour
 {
-    [SerializeField] private float horizontalInput;
-    [SerializeField] private float verticalInput;
+    //[SerializeField] private float horizontalInput;
+    //[SerializeField] private float verticalInput;
     //[SerializeField] private float speed = 30.0f;
     private Vector2 direction = Vector2.right;          //go right by default
     private List<Transform> bodyparts;
@@ -23,31 +23,33 @@ public class Snake : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        // Dog Movement
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        
+        //horizontalInput = Input.GetAxis("Horizontal");
+        //verticalInput = Input.GetAxis("Vertical");
 
         //Vector3 newPosition = new Vector3(0.0f, verticalInput, horizontalInput);    // set new position via WASD
         //transform.LookAt(transform.position + newPosition);                         // look at new position
 
-        if (verticalInput > 0) {
-            direction = Vector2.up;
-        } else if (verticalInput < 0) {
-            direction = Vector2.down;
-        } else if(horizontalInput > 0) {
-            direction = Vector2.right;
-        } else if (horizontalInput < 0) {
-            direction = Vector2.left;
-        }
-        //if (Input.GetKeyDown(KeyCode.W)) {
+        //if (verticalInput > 0) {
         //    direction = Vector2.up;
-        //} else if (Input.GetKeyDown(KeyCode.S)) {
+        //} else if (verticalInput < 0) {
         //    direction = Vector2.down;
-        //} else if (Input.GetKeyDown(KeyCode.A)) {
-        //    direction = Vector2.left;
-        //} else if (Input.GetKeyDown(KeyCode.D)) {
+        //} else if(horizontalInput > 0) {
         //    direction = Vector2.right;
+        //} else if (horizontalInput < 0) {
+        //    direction = Vector2.left;
         //}
+        
+        // Snake Movement
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+            direction = Vector2.up;
+        } else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
+            direction = Vector2.down;
+        } else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
+            direction = Vector2.left;
+        } else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
+            direction = Vector2.right;
+        }
 
 
     }

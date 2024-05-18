@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Food
   - Wall
+  - Special Food
+  - Fire Bullet
+  - Special Bullet
+  - Level Food
   layers:
   - Default
   - TransparentFX

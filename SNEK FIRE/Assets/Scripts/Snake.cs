@@ -23,7 +23,7 @@ public class Snake : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        
+
         //horizontalInput = Input.GetAxis("Horizontal");
         //verticalInput = Input.GetAxis("Vertical");
 
@@ -39,17 +39,25 @@ public class Snake : MonoBehaviour
         //} else if (horizontalInput < 0) {
         //    direction = Vector2.left;
         //}
-        
+
         // Snake Movement
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+    if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+        if (!(bodyparts.Count > 1 && direction == Vector2.down)) {
             direction = Vector2.up;
-        } else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
+        }
+    } else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
+        if (!(bodyparts.Count > 1 && direction == Vector2.up)) {
             direction = Vector2.down;
-        } else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
+        }
+    } else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
+        if (!(bodyparts.Count > 1 && direction == Vector2.right)) {
             direction = Vector2.left;
-        } else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
+        }
+    } else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
+        if (!(bodyparts.Count > 1 && direction == Vector2.left)) {
             direction = Vector2.right;
         }
+    }
 
 
     }

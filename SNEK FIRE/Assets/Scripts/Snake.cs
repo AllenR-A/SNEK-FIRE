@@ -7,6 +7,8 @@ public class Snake : MonoBehaviour
     //for MovementInput1()
     [SerializeField] private float horizontalInput;
     [SerializeField] private float verticalInput;
+    [SerializeField] private float fire1Input;
+    [SerializeField] private float fire2Input;
 
     [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of head movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
     [SerializeField] private Vector2Int bodyDirection;                      //Direction of Bodypart no.1 (used to prevent the head from colliding with the bodypart following it)
@@ -34,17 +36,19 @@ public class Snake : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        MovementInput1();
+        Input1();
     }
 
     private void FixedUpdate()
     {
     }
 
-    private void MovementInput1() {
+    private void Input1() {
         // Snake Movement [original style || using GetAxis]
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
+        fire1Input = Input.GetAxisRaw("Fire1");
+        fire2Input = Input.GetAxisRaw("Fire2");
 
         // Get Direction of Body no.1 (help prevent head from moving back on itself and hitting said body)
         Vector3 body1_Direction = Vector3.zero;
@@ -70,8 +74,12 @@ public class Snake : MonoBehaviour
             if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.right))
             { direction = Vector2Int.left; }
         }
+
+        if (fire1Input == 1) Fire1();
+        else if (fire2Input == 1) Fire2();
+
     }
-    private void MovementInput2() {
+    private void Input2() {
         // Snake Movement [using KeyCode]
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
             if (!(bodyparts.Count > 1 && direction == Vector2Int.down)) {
@@ -95,6 +103,15 @@ public class Snake : MonoBehaviour
         }
     }
 
+    private void Fire1()
+    {
+        playerAnim.SetTrigger("attack_t");                                          // PLAY ANIMATION
+    }
+
+    private void Fire2()
+    {
+        playerAnim.SetTrigger("attack_t");                                          // PLAY ANIMATION
+    }
 
     IEnumerator MoveSnake()
     {
@@ -184,8 +201,8 @@ public class Snake : MonoBehaviour
 
     private void Death() {
         alive = false;      //must activate first [as MoveBack() makes the head crash into the body, making this run again]
+        playerAnim.SetBool("death_b", true);                                        // PLAY ANIMATION
         MoveBack();
-        playerAnim.SetBool("death_b", true);                                         // PLAY ANIMATION
 
     }
 
@@ -203,7 +220,7 @@ public class Snake : MonoBehaviour
     }
 
     private void Grow(){
-        Transform bodypart = Instantiate(this.bodyPrefab);              // spawn new bodypart (and get transform)
+        Transform bodypart = Instantiate(this.bodyPrefab);                          // spawn new bodypart (and get transform)
 
         /*Calculate position of the new tail end using the old tail direction to spawn it behind
         (the old way spawns it on the tail or head at the very first growth can cause a collision with itself) */
@@ -214,8 +231,8 @@ public class Snake : MonoBehaviour
         //Debug.Log("[GROW()] tailDirection X: " + tailDirection.x + "tailDirection Y: " + tailDirection.y);
         Vector3 newTailPosition = oldTailPosition - new Vector3(tailDirection.x, tailDirection.y, 0);   //Offsetting new body
         //Debug.Log("[GROW()] NEW POS: " + newTailPosition);
-        bodypart.position = newTailPosition;                            // set transform of new bodypart to the old one (replacing tail-end)
-        bodypart.eulerAngles = oldTailRotation;                         // set rotation of new bodypart to the old one (replacing tail-end)
-        bodyparts.Add(bodypart);                                        // add this to the list of bodyparts
+        bodypart.position = newTailPosition;                                        // set transform of new bodypart to the old one (replacing tail-end)
+        bodypart.eulerAngles = oldTailRotation;                                     // set rotation of new bodypart to the old one (replacing tail-end)
+        bodyparts.Add(bodypart);                                                    // add this to the list of bodyparts
     }
 }

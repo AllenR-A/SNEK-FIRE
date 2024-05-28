@@ -7,13 +7,11 @@ public class Snake : MonoBehaviour
     //for MovementInput1()
     [SerializeField] private float horizontalInput;
     [SerializeField] private float verticalInput;
-    [SerializeField] private float speed = 30.0f;
-
 
     [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
     [SerializeField] private Vector3 tailPositionBeforeMovement;            //Current position of the snake
     [SerializeField] private Vector2Int tailDirection;                      //Track tail direction
-    [SerializeField] private float movementInterval = .25f;                 //[SPEED] Sets how long the interval is for each movement
+    [SerializeField] private float movementIntervalForSPEED = .25f;                 //[SPEED] Sets how long the interval is for each movement
 
     private List<Transform> bodyparts;
     [SerializeField] private Transform bodyPrefab;
@@ -116,7 +114,7 @@ public class Snake : MonoBehaviour
                 );
 
             SetTailDirection(tailPositionBeforeMovement);
-            yield return new WaitForSeconds(movementInterval);
+            yield return new WaitForSeconds(movementIntervalForSPEED);
         }
     }
     private void MoveBack()

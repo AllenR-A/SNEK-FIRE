@@ -11,7 +11,7 @@ public class Snake : MonoBehaviour
 
 
     [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
-    [SerializeField] private Vector3 tailpositionBeforeMovement;            //Current position of the snake
+    [SerializeField] private Vector3 tailPositionBeforeMovement;            //Current position of the snake
     [SerializeField] private Vector2Int tailDirection;                      //Track tail direction
     private float movementTimer = 0;
     [SerializeField] private float movementTimerMax = .25f;                 //[SPEED] Sets how long the interval is for each movement
@@ -100,14 +100,14 @@ public class Snake : MonoBehaviour
 
     private void MoveSnake()
     {
-        //save tail position before moving
-        if (bodyparts.Count > 1)
-        { tailpositionBeforeMovement = new Vector3(bodyparts[bodyparts.Count - 1].position.x, bodyparts[bodyparts.Count - 1].position.y, 0); }
-        else
-        { tailpositionBeforeMovement = new Vector3(this.transform.position.x, this.transform.position.y, 0); }
-
         if (alive)
         {
+            //save tail position before moving
+            if (bodyparts.Count > 1)
+            { tailPositionBeforeMovement = new Vector3(bodyparts[bodyparts.Count - 1].position.x, bodyparts[bodyparts.Count - 1].position.y, 0); }
+            else
+            { tailPositionBeforeMovement = new Vector3(this.transform.position.x, this.transform.position.y, 0); }
+
             //Move Bodyparts
             for (int i = bodyparts.Count - 1; i > 0; i--)                       // for each bodypart, go in reverse, repeat until it the last one is positioned to where the head is.
             {
@@ -123,19 +123,7 @@ public class Snake : MonoBehaviour
                 0.0f
                 );
 
-            Vector3 getDirection = Vector3.zero;
-            //Keep updating tail direction tracker
-            if (bodyparts.Count > 1) {
-                //Debug.Log("[MoveSnake()] Body2ndtolasst POS: " + bodyparts[bodyparts.Count - 1].position);
-                //Debug.Log("[MoveSnake()] Previous POS: " + tailpositionBeforeMovement);
-                getDirection = bodyparts[bodyparts.Count - 1].position - tailpositionBeforeMovement;
-            } else {
-                //Get direction of Head (as it is also the current tail)
-                Vector3 positionAfterMovement = new Vector3((int)this.transform.position.x, (int)this.transform.position.y, 0);
-                getDirection = positionAfterMovement - tailpositionBeforeMovement;
-            }
-            tailDirection = new Vector2Int((int)getDirection.x, (int)getDirection.y);
-            //Debug.Log("[MoveSnake()] Tail Direction [Vector2Int]: " + tailDirection);
+            SetTailDirection(tailPositionBeforeMovement);
         }
     }
     //IEnumerator MoveSnake()
@@ -169,6 +157,23 @@ public class Snake : MonoBehaviour
             tail.transform.position.y + reverseDirection.y,
             0.0f
             );
+    }
+
+    private void SetTailDirection(Vector3 tailPositionBeforeMovement)
+    {
+        Vector3 getDirection = Vector3.zero;
+        //Keep updating tail direction tracker
+        if (bodyparts.Count > 1) {
+            //Debug.Log("[MoveSnake()] Body2ndtolasst POS: " + bodyparts[bodyparts.Count - 1].position);
+            //Debug.Log("[MoveSnake()] Previous POS: " + tailPositionBeforeMovement);
+            getDirection = bodyparts[bodyparts.Count - 1].position - tailPositionBeforeMovement;
+        } else {
+            //Get direction of Head (as it is also the current tail)
+            Vector3 positionAfterMovement = new Vector3((int)this.transform.position.x, (int)this.transform.position.y, 0);
+            getDirection = positionAfterMovement - tailPositionBeforeMovement;
+        }
+        tailDirection = new Vector2Int((int)getDirection.x, (int)getDirection.y);
+        //Debug.Log("[MoveSnake()] Tail Direction [Vector2Int]: " + tailDirection);
     }
 
     private void Death() {

@@ -46,9 +46,6 @@ public class Snake : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        //Vector3 newPosition = new Vector3(0.0f, verticalInput, horizontalInput);    // set new position via WASD
-        //transform.LookAt(transform.position + newPosition);                         // look at new position
-
         // Get Direction of Body no.1 (help prevent head from moving back on itself and hitting said body)
         Vector3 body1_Direction = Vector3.zero;
         if (bodyparts.Count > 1) {

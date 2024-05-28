@@ -32,11 +32,11 @@ public class Snake : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        MovementInput1();
     }
 
     private void FixedUpdate()
     {
-        MovementInput1();
     }
 
     private void MovementInput1() {

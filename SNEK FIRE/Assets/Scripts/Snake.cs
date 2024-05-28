@@ -19,9 +19,12 @@ public class Snake : MonoBehaviour
     [SerializeField] private bool alive = true;
     private bool attacking;
 
+    private Animator playerAnim;
+
     // Start is called before the first frame update
     private void Start()
     {
+        playerAnim = GetComponent<Animator>();
         bodyparts = new List<Transform>();
         bodyparts.Add(this.transform);
 
@@ -185,6 +188,8 @@ public class Snake : MonoBehaviour
     private void Death() {
         alive = false;      //must activate first [as MoveBack() makes the head crash into the body, making this run again]
         MoveBack();
+        playerAnim.SetBool("death_b", true);                                         // PLAY ANIMATION
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)

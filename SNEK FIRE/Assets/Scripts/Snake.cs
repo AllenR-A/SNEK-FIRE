@@ -197,7 +197,8 @@ public class Snake : MonoBehaviour
     private void Grow(){
         Transform bodypart = Instantiate(this.bodyPrefab);              // spawn new bodypart (and get transform)
 
-        //Calculate position of the new tail end using the old tail direction to spawn it behind (the old way spawns it on the tail or head at the very first growth can cause a collision with itself)
+        /*Calculate position of the new tail end using the old tail direction to spawn it behind
+        (the old way spawns it on the tail or head at the very first growth can cause a collision with itself) */
         Vector3 oldTailPosition = bodyparts[bodyparts.Count - 1].position;
 
         //Debug.Log("[GROW()] OLD POS: " + oldTailPosition);

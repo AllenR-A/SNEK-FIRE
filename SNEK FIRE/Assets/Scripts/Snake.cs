@@ -111,6 +111,7 @@ public class Snake : MonoBehaviour
             {
                 //Debug.Log("bodyparts[" + i + "].position = bodyparts[" + (i - 1) + "].position");
                 bodyparts[i].position = bodyparts[i - 1].position;              // position it to the one next to it (set to a lower number)
+                bodyparts[i].eulerAngles = bodyparts[i - 1].eulerAngles;        // also follow the rotation
 
             }
 
@@ -205,12 +206,14 @@ public class Snake : MonoBehaviour
         /*Calculate position of the new tail end using the old tail direction to spawn it behind
         (the old way spawns it on the tail or head at the very first growth can cause a collision with itself) */
         Vector3 oldTailPosition = bodyparts[bodyparts.Count - 1].position;
+        Vector3 oldTailRotation = bodyparts[bodyparts.Count - 1].eulerAngles;
 
         //Debug.Log("[GROW()] OLD POS: " + oldTailPosition);
         //Debug.Log("[GROW()] tailDirection X: " + tailDirection.x + "tailDirection Y: " + tailDirection.y);
-        Vector3 newTailPosition = oldTailPosition - new Vector3(tailDirection.x, tailDirection.y, 0);
+        Vector3 newTailPosition = oldTailPosition - new Vector3(tailDirection.x, tailDirection.y, 0);   //Offsetting new body
         //Debug.Log("[GROW()] NEW POS: " + newTailPosition);
         bodypart.position = newTailPosition;                            // set transform of new bodypart to the old one (replacing tail-end)
+        bodypart.eulerAngles = oldTailRotation;                         // set rotation of new bodypart to the old one (replacing tail-end)
         bodyparts.Add(bodypart);                                        // add this to the list of bodyparts
     }
 }

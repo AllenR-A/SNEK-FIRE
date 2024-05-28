@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Snake : MonoBehaviour
 {
-    //[SerializeField] private float horizontalInput;
-    //[SerializeField] private float verticalInput;
-    //[SerializeField] private float speed = 30.0f;
+    //for SnakeMovement1()
+    [SerializeField] private float horizontalInput;
+    [SerializeField] private float verticalInput;
+    [SerializeField] private float speed = 30.0f;
+
+
     private Vector2 direction = Vector2.right;          //go right by default
     private List<Transform> bodyparts;
     [SerializeField] private Transform bodyPrefab;
@@ -23,36 +26,54 @@ public class Snake : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        SnakeMovement();
+        SnakeMovement1();
     }
 
-    private void SnakeMovement()
-    {
-        // Snake Movement
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+    private void SnakeMovement1() {
+
+        // Snake Movement [original style || using GetAxis]
+
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+
+        //Vector3 newPosition = new Vector3(0.0f, verticalInput, horizontalInput);    // set new position via WASD
+        //transform.LookAt(transform.position + newPosition);                         // look at new position
+
+        if (verticalInput == 1) {
             if (!(bodyparts.Count > 1 && direction == Vector2.down))
-            {
+            { direction = Vector2.up; }
+        } else if (verticalInput == -1) {
+            if (!(bodyparts.Count > 1 && direction == Vector2.up))
+            { direction = Vector2.down; }
+        } else if(horizontalInput == 1) {
+            if (!(bodyparts.Count > 1 && direction == Vector2.left))
+            { direction = Vector2.right; }
+        } else if (horizontalInput == -1) {
+            if (!(bodyparts.Count > 1 && direction == Vector2.right))
+            { direction = Vector2.left; }
+        }
+    }
+
+    private void SnakeMovement2() {
+
+        // Snake Movement [using KeyCode]
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
+            if (!(bodyparts.Count > 1 && direction == Vector2.down)) {
                 direction = Vector2.up;
             }
         }
-        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            if (!(bodyparts.Count > 1 && direction == Vector2.up))
-            {
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
+            if (!(bodyparts.Count > 1 && direction == Vector2.up)) {
                 direction = Vector2.down;
             }
         }
-        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            if (!(bodyparts.Count > 1 && direction == Vector2.right))
-            {
+        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
+            if (!(bodyparts.Count > 1 && direction == Vector2.right)) {
                 direction = Vector2.left;
             }
         }
-        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            if (!(bodyparts.Count > 1 && direction == Vector2.left))
-            {
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
+            if (!(bodyparts.Count > 1 && direction == Vector2.left)) {
                 direction = Vector2.right;
             }
         }

@@ -145,6 +145,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   area: {fileID: 0}
+  spawnPosition: {x: 0, y: 0}
+  boxSize: {x: 0, y: 0}
+  boxAngle: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!95 &4352194166007578282
 Animator:
   serializedVersion: 5

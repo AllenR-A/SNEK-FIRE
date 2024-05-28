@@ -16,8 +16,8 @@ public class Snake : MonoBehaviour
     [SerializeField] private Vector3 tailPositionBeforeMovement;            //Current position of the snake
     [SerializeField] private float movementIntervalForSPEED = .25f;         //[SPEED] Sets how long the interval is for each movement
 
-    private List<Transform> bodyparts;
-    [SerializeField] private Transform bodyPrefab;
+    private List<GameObject> bodyparts;
+    [SerializeField] private GameObject bodyPrefab;
     [SerializeField] private bool alive = true;
     private bool attacking;
 
@@ -27,8 +27,8 @@ public class Snake : MonoBehaviour
     private void Start()
     {
         playerAnim = GetComponent<Animator>();
-        bodyparts = new List<Transform>();
-        bodyparts.Add(this.transform);
+        bodyparts = new List<GameObject>();
+        bodyparts.Add(gameObject);
 
         StartCoroutine(MoveSnake());
     }
@@ -53,7 +53,7 @@ public class Snake : MonoBehaviour
         // Get Direction of Body no.1 (help prevent head from moving back on itself and hitting said body)
         Vector3 body1_Direction = Vector3.zero;
         if (bodyparts.Count > 1) {
-            body1_Direction = bodyparts[0].position - bodyparts[1].position;
+            body1_Direction = bodyparts[0].transform.position - bodyparts[1].transform.position;
         } else {
             // Get direction of Head (as it is also the current body). While it currently CAN reverse movement, this would be useful when it gains its first bodypart.
             Vector3 positionAfterMovement = new Vector3((int)this.transform.position.x, (int)this.transform.position.y, 0);
@@ -119,16 +119,16 @@ public class Snake : MonoBehaviour
         {
             //save tail position before moving
             if (bodyparts.Count > 1)
-            { tailPositionBeforeMovement = new Vector3(bodyparts[bodyparts.Count - 1].position.x, bodyparts[bodyparts.Count - 1].position.y, 0); }
+            { tailPositionBeforeMovement = new Vector3(bodyparts[bodyparts.Count - 1].transform.position.x, bodyparts[bodyparts.Count - 1].transform.position.y, 0); }
             else
             { tailPositionBeforeMovement = new Vector3(this.transform.position.x, this.transform.position.y, 0); }
 
             //Move Bodyparts
             for (int i = bodyparts.Count - 1; i > 0; i--)                       // for each bodypart, go in reverse, repeat until it the last one is positioned to where the head is.
             {
-                //Debug.Log("bodyparts[" + i + "].position = bodyparts[" + (i - 1) + "].position");
-                bodyparts[i].position = bodyparts[i - 1].position;              // position it to the one next to it (set to a lower number)
-                bodyparts[i].eulerAngles = bodyparts[i - 1].eulerAngles;        // also follow the rotation
+                //Debug.Log("bodyparts[" + i + "].transform.position = bodyparts[" + (i - 1) + "].transform.position");
+                bodyparts[i].transform.position = bodyparts[i - 1].transform.position;              // position it to the one next to it (set to a lower number)
+                bodyparts[i].transform.eulerAngles = bodyparts[i - 1].transform.eulerAngles;        // also follow the rotation
 
             }
 
@@ -151,8 +151,8 @@ public class Snake : MonoBehaviour
         //So that the snake doesn't clip through the wall when it dies
         //Move Bodyparts
         for (int i = 0; i < bodyparts.Count - 1; i++) {                         //can reuse old one since that one already works in reverse, but the tail-end won't move yet.
-            //Debug.Log("bodyparts[" + i + "].position = bodyparts[" + (i + 1) + "].position");
-            bodyparts[i].position = bodyparts[i + 1].position;                  // position it to the one before to it "[i + 1]" (set to a higher numbered bodypart)
+            //Debug.Log("bodyparts[" + i + "].transform.position = bodyparts[" + (i + 1) + "].transform.position");
+            bodyparts[i].transform.position = bodyparts[i + 1].transform.position;                  // position it to the one before to it "[i + 1]" (set to a higher numbered bodypart)
         }
 
         //Reverse direction manually (for the tail)
@@ -167,7 +167,7 @@ public class Snake : MonoBehaviour
         { reverseDirection = Vector2Int.left; }
 
         //Move Snake Tail Back
-        Transform tail = bodyparts[bodyparts.Count - 1];
+        Transform tail = bodyparts[bodyparts.Count - 1].transform;
         tail.transform.position = new Vector3(
             tail.transform.position.x + reverseDirection.x,
             tail.transform.position.y + reverseDirection.y,
@@ -187,9 +187,9 @@ public class Snake : MonoBehaviour
         Vector3 getDirection = Vector3.zero;
         //Keep updating tail direction tracker
         if (bodyparts.Count > 1) {
-            //Debug.Log("[MoveSnake()] Body2ndtolasst POS: " + bodyparts[bodyparts.Count - 1].position);
+            //Debug.Log("[MoveSnake()] Body2ndtolasst POS: " + bodyparts[bodyparts.Count - 1].transform.position);
             //Debug.Log("[MoveSnake()] Previous POS: " + tailPositionBeforeMovement);
-            getDirection = bodyparts[bodyparts.Count - 1].position - tailPositionBeforeMovement;
+            getDirection = bodyparts[bodyparts.Count - 1].transform.position - tailPositionBeforeMovement;
         } else {
             //Get direction of Head (as it is also the current tail)
             Vector3 positionAfterMovement = new Vector3((int)this.transform.position.x, (int)this.transform.position.y, 0);
@@ -220,19 +220,19 @@ public class Snake : MonoBehaviour
     }
 
     private void Grow(){
-        Transform bodypart = Instantiate(this.bodyPrefab);                          // spawn new bodypart (and get transform)
+        GameObject bodypart = Instantiate(this.bodyPrefab);                          // spawn new bodypart (and get transform)
 
         /*Calculate position of the new tail end using the old tail direction to spawn it behind
         (the old way spawns it on the tail or head at the very first growth can cause a collision with itself) */
-        Vector3 oldTailPosition = bodyparts[bodyparts.Count - 1].position;
-        Vector3 oldTailRotation = bodyparts[bodyparts.Count - 1].eulerAngles;
+        Vector3 oldTailPosition = bodyparts[bodyparts.Count - 1].transform.position;
+        Vector3 oldTailRotation = bodyparts[bodyparts.Count - 1].transform.eulerAngles;
 
         //Debug.Log("[GROW()] OLD POS: " + oldTailPosition);
         //Debug.Log("[GROW()] tailDirection X: " + tailDirection.x + "tailDirection Y: " + tailDirection.y);
         Vector3 newTailPosition = oldTailPosition - new Vector3(tailDirection.x, tailDirection.y, 0);   //Offsetting new body
         //Debug.Log("[GROW()] NEW POS: " + newTailPosition);
-        bodypart.position = newTailPosition;                                        // set transform of new bodypart to the old one (replacing tail-end)
-        bodypart.eulerAngles = oldTailRotation;                                     // set rotation of new bodypart to the old one (replacing tail-end)
+        bodypart.transform.position = newTailPosition;                                        // set transform of new bodypart to the old one (replacing tail-end)
+        bodypart.transform.eulerAngles = oldTailRotation;                                     // set rotation of new bodypart to the old one (replacing tail-end)
         bodyparts.Add(bodypart);                                                    // add this to the list of bodyparts
     }
 }

@@ -9,7 +9,7 @@ public class Snake : MonoBehaviour
     //[SerializeField] private float speed = 30.0f;
     private Vector2 direction = Vector2.right;          //go right by default
     private List<Transform> bodyparts;
-    public Transform bodyPrefab;
+    [SerializeField] private Transform bodyPrefab;
     private bool alive = true;
     private bool attacking;
 

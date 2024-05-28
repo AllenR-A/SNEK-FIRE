@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class Snake : MonoBehaviour
 {
-    //for SnakeMovement1()
+    //for MovementInput1()
     [SerializeField] private float horizontalInput;
     [SerializeField] private float verticalInput;
     [SerializeField] private float speed = 30.0f;
 
 
-    private Vector2 direction = Vector2.right;          //go right by default
+    [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
+    [SerializeField] private Vector2Int currentPosition;                    //Current position of the snake
+    [SerializeField] private Vector2Int tailDirection;                      //Track tail direction
+
     private List<Transform> bodyparts;
     [SerializeField] private Transform bodyPrefab;
     private bool alive = true;
@@ -26,10 +29,10 @@ public class Snake : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        SnakeMovement1();
+        MovementInput1();
     }
 
-    private void SnakeMovement1() {
+    private void MovementInput1() {
 
         // Snake Movement [original style || using GetAxis]
 
@@ -40,73 +43,128 @@ public class Snake : MonoBehaviour
         //transform.LookAt(transform.position + newPosition);                         // look at new position
 
         if (verticalInput == 1) {
-            if (!(bodyparts.Count > 1 && direction == Vector2.down))
-            { direction = Vector2.up; }
+            if (!(bodyparts.Count > 1 && direction == Vector2Int.down))
+            { direction = Vector2Int.up; }
         } else if (verticalInput == -1) {
-            if (!(bodyparts.Count > 1 && direction == Vector2.up))
-            { direction = Vector2.down; }
+            if (!(bodyparts.Count > 1 && direction == Vector2Int.up))
+            { direction = Vector2Int.down; }
         } else if(horizontalInput == 1) {
-            if (!(bodyparts.Count > 1 && direction == Vector2.left))
-            { direction = Vector2.right; }
+            if (!(bodyparts.Count > 1 && direction == Vector2Int.left))
+            { direction = Vector2Int.right; }
         } else if (horizontalInput == -1) {
-            if (!(bodyparts.Count > 1 && direction == Vector2.right))
-            { direction = Vector2.left; }
+            if (!(bodyparts.Count > 1 && direction == Vector2Int.right))
+            { direction = Vector2Int.left; }
         }
     }
 
-    private void SnakeMovement2() {
+    private void MovementInput2() {
 
         // Snake Movement [using KeyCode]
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
-            if (!(bodyparts.Count > 1 && direction == Vector2.down)) {
-                direction = Vector2.up;
+            if (!(bodyparts.Count > 1 && direction == Vector2Int.down)) {
+                direction = Vector2Int.up;
             }
         }
         else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
-            if (!(bodyparts.Count > 1 && direction == Vector2.up)) {
-                direction = Vector2.down;
+            if (!(bodyparts.Count > 1 && direction == Vector2Int.up)) {
+                direction = Vector2Int.down;
             }
         }
         else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
-            if (!(bodyparts.Count > 1 && direction == Vector2.right)) {
-                direction = Vector2.left;
+            if (!(bodyparts.Count > 1 && direction == Vector2Int.right)) {
+                direction = Vector2Int.left;
             }
         }
         else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
-            if (!(bodyparts.Count > 1 && direction == Vector2.left)) {
-                direction = Vector2.right;
+            if (!(bodyparts.Count > 1 && direction == Vector2Int.left)) {
+                direction = Vector2Int.right;
             }
         }
     }
 
-    private void FixedUpdate()
+    private void FixedUpdate() {
+        MoveSnake();
+    }
+
+    private void MoveSnake()
     {
-        if (alive) {
-            for (int i = bodyparts.Count - 1; i > 0; i--) {
-                bodyparts[i].position = bodyparts[i - 1].position;
+        if (alive)
+        {
+            //Move Bodyparts
+            for (int i = bodyparts.Count - 1; i > 0; i--)                       // for each bodypart, go in reverse, repeat until it the last one is positioned to where the head is.
+            {
+                //Debug.Log("bodyparts[" + i + "].position = bodyparts[" + (i - 1) + "].position");
+                bodyparts[i].position = bodyparts[i - 1].position;              // position it to the one next to it (set to a lower number)
             }
-            this.transform.position = new Vector3(
+
+            //Keep updating tail direction tracker
+            if (bodyparts.Count > 1) {
+                //Debug.Log("Body2ndtolasst POS: " + bodyparts[bodyparts.Count - 2].position);
+                //Debug.Log("Tail POS: " + bodyparts[bodyparts.Count - 1].position);
+                Vector3 getDirection = bodyparts[bodyparts.Count-2].position - bodyparts[bodyparts.Count - 1].position;
+                tailDirection = new Vector2Int((int)getDirection.x, (int)getDirection.y);
+                //Debug.Log("Tail Direction [Vector2Int]: " + tailDirection);
+            }
+
+            //Move Snake Head
+            this.transform.position = new Vector3(                              
                 this.transform.position.x + direction.x,
                 this.transform.position.y + direction.y,
                 0.0f
                 );
         }
     }
+
+    private void MoveBack()
+    {
+        //So that the snake doesn't clip through the wall when it dies
+        //Move Bodyparts
+        for (int i = 0; i < bodyparts.Count - 1; i++) {                         //can reuse old one since that one already works in reverse, but the tail-end won't move yet.
+            //Debug.Log("bodyparts[" + i + "].position = bodyparts[" + (i + 1) + "].position");
+            bodyparts[i].position = bodyparts[i + 1].position;                  // position it to the one before to it "[i + 1]" (set to a higher numbered bodypart)
+        }
+
+        //Reverse direction manually (for the tail)
+        Vector2Int reverseDirection = new Vector2Int(0, 0);
+        if (tailDirection == Vector2Int.down)
+        { reverseDirection = Vector2Int.up; }
+        else if (tailDirection == Vector2Int.up)
+        { reverseDirection = Vector2Int.down; }
+        else if (tailDirection == Vector2Int.left)
+        { reverseDirection = Vector2Int.right; }
+        else if (tailDirection == Vector2Int.right)
+        { reverseDirection = Vector2Int.left; }
+
+        //Move Snake Tail Back
+        Transform tail = bodyparts[bodyparts.Count - 1];
+        tail.transform.position = new Vector3(
+            tail.transform.position.x + reverseDirection.x,
+            tail.transform.position.y + reverseDirection.y,
+            0.0f
+            );
+    }
+
+    private void Death() {
+        alive = false;      //must activate first [as MoveBack() makes the head crash into the body, making this run again]
+        MoveBack();
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Wall"){
+        if (other.tag == "Wall" && alive) {
             Debug.Log("YOU DIED.");
-            alive = false;
+            Death();
         } else if (other.tag == "Food"){
             Grow();
-        } else if (other.tag == "Player"){
+        } else if (other.tag == "Player" && alive){
             Debug.Log("YOU CRASHED ON YOURSELF.");
+            Death();
         }
     }
 
     private void Grow(){
-        Transform bodypart = Instantiate(this.bodyPrefab);              // spawn new bodypart
-        bodypart.position = bodyparts[bodyparts.Count - 1].position;    // set transform of new bodypart to the old one
+        Transform bodypart = Instantiate(this.bodyPrefab);              // spawn new bodypart (and get transform)
+        bodypart.position = bodyparts[bodyparts.Count - 1].position;    // set transform of new bodypart to the old one (replacing tail-end)
         bodyparts.Add(bodypart);                                        // add this to the list of bodyparts
 
     }

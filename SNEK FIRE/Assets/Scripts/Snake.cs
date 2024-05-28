@@ -121,6 +121,9 @@ public class Snake : MonoBehaviour
                 0.0f
                 );
 
+            //Turn Snake Head
+            this.transform.eulerAngles = new Vector3(0, 0, GetAngleFromVector2Int(direction)+90);
+
             SetTailDirection(tailPositionBeforeMovement);
             yield return new WaitForSeconds(movementIntervalForSPEED);
         }
@@ -152,6 +155,13 @@ public class Snake : MonoBehaviour
             tail.transform.position.y + reverseDirection.y,
             0.0f
             );
+    }
+
+    private float GetAngleFromVector2Int(Vector2Int direction)
+    {
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        if (angle < 0) angle += 360; 
+        return angle;
     }
 
     private void SetTailDirection(Vector3 tailPositionBeforeMovement)

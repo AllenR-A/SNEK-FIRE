@@ -116,7 +116,7 @@ public class Snake : MonoBehaviour
                 );
 
             SetTailDirection(tailPositionBeforeMovement);
-            yield return new WaitForSeconds(movementTimerMax);
+            yield return new WaitForSeconds(movementInterval);
         }
     }
     private void MoveBack()

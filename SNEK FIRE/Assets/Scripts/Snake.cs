@@ -13,7 +13,7 @@ public class Snake : MonoBehaviour
     [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
     [SerializeField] private Vector3 tailPositionBeforeMovement;            //Current position of the snake
     [SerializeField] private Vector2Int tailDirection;                      //Track tail direction
-    [SerializeField] private float movementTimerMax = .25f;                 //[SPEED] Sets how long the interval is for each movement
+    [SerializeField] private float movementInterval = .25f;                 //[SPEED] Sets how long the interval is for each movement
 
     private List<Transform> bodyparts;
     [SerializeField] private Transform bodyPrefab;
@@ -32,6 +32,11 @@ public class Snake : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+    }
+
+    private void FixedUpdate()
+    {
+        MovementInput1();
     }
 
     private void MovementInput1() {
@@ -84,10 +89,6 @@ public class Snake : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        MovementInput1();
-    }
 
     IEnumerator MoveSnake()
     {

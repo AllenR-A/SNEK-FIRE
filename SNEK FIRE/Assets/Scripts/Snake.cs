@@ -8,10 +8,11 @@ public class Snake : MonoBehaviour
     [SerializeField] private float horizontalInput;
     [SerializeField] private float verticalInput;
 
-    [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
+    [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of head movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
+    [SerializeField] private Vector2Int bodyDirection;                      //Direction of Bodypart no.1 (used to prevent the head from colliding with the bodypart following it)
+    [SerializeField] private Vector2Int tailDirection;                      //Track tail (last bodypart) direction
     [SerializeField] private Vector3 tailPositionBeforeMovement;            //Current position of the snake
-    [SerializeField] private Vector2Int tailDirection;                      //Track tail direction
-    [SerializeField] private float movementIntervalForSPEED = .25f;                 //[SPEED] Sets how long the interval is for each movement
+    [SerializeField] private float movementIntervalForSPEED = .25f;         //[SPEED] Sets how long the interval is for each movement
 
     private List<Transform> bodyparts;
     [SerializeField] private Transform bodyPrefab;
@@ -38,32 +39,39 @@ public class Snake : MonoBehaviour
     }
 
     private void MovementInput1() {
-
         // Snake Movement [original style || using GetAxis]
-
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
         //Vector3 newPosition = new Vector3(0.0f, verticalInput, horizontalInput);    // set new position via WASD
         //transform.LookAt(transform.position + newPosition);                         // look at new position
 
+        // Get Direction of Body no.1 (help prevent head from moving back on itself and hitting said body)
+        Vector3 body1_Direction = Vector3.zero;
+        if (bodyparts.Count > 1) {
+            body1_Direction = bodyparts[0].position - bodyparts[1].position;
+        } else {
+            // Get direction of Head (as it is also the current body). While it currently CAN reverse movement, this would be useful when it gains its first bodypart.
+            Vector3 positionAfterMovement = new Vector3((int)this.transform.position.x, (int)this.transform.position.y, 0);
+            body1_Direction = positionAfterMovement - tailPositionBeforeMovement;
+        }
+        bodyDirection = new Vector2Int((int)body1_Direction.x, (int)body1_Direction.y);
+
         if (verticalInput == 1) {
-            if (!(bodyparts.Count > 1 && direction == Vector2Int.down))
+            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.down))
             { direction = Vector2Int.up; }
         } else if (verticalInput == -1) {
-            if (!(bodyparts.Count > 1 && direction == Vector2Int.up))
+            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.up))
             { direction = Vector2Int.down; }
         } else if(horizontalInput == 1) {
-            if (!(bodyparts.Count > 1 && direction == Vector2Int.left))
+            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.left))
             { direction = Vector2Int.right; }
         } else if (horizontalInput == -1) {
-            if (!(bodyparts.Count > 1 && direction == Vector2Int.right))
+            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.right))
             { direction = Vector2Int.left; }
         }
     }
-
     private void MovementInput2() {
-
         // Snake Movement [using KeyCode]
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) {
             if (!(bodyparts.Count > 1 && direction == Vector2Int.down)) {

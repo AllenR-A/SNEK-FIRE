@@ -6377,10 +6377,11 @@ MonoBehaviour:
   verticalInput: 0
   speed: 30
   direction: {x: 1, y: 0}
-  currentPosition: {x: 0, y: 0}
+  tailpositionBeforeMovement: {x: 0, y: 0, z: 0}
   tailDirection: {x: 0, y: 0}
-  movementTimerMax: 1
+  movementTimerMax: 0.2
   bodyPrefab: {fileID: 4770450307657190208, guid: 5e038a1452b0b1146ae5aa89106636de, type: 3}
+  alive: 1
 --- !u!95 &1611188118
 Animator:
   serializedVersion: 5

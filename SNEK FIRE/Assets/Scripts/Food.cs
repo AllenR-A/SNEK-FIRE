@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Food : MonoBehaviour
 {
-    public BoxCollider2D area;
-    public Vector2 spawnPosition; // Position where you want to spawn the item
-    public Vector2 boxSize; // Size of the box cast
-    public float boxAngle = 0f; // Angle of the box cast in degrees
-    public LayerMask layerMask; // Layer mask to define which layers to check against
+    private BoxCollider2D area;
+    [SerializeField] private int foodPoints;        //How much this food is worth
+    [SerializeField] private Vector2 spawnPosition; // Position where you want to spawn the item
+    [SerializeField] private Vector2 boxSize;       // Size of the box cast
+    private float boxAngle = 0f;                    // Angle of the box cast in degrees
+    [SerializeField] private LayerMask layerMask;   // Layer mask to define which layers to check against
 
     bool CanSpawnItem(Vector2 position, Vector2 size, float angle)
     {
@@ -23,6 +24,7 @@ public class Food : MonoBehaviour
     private void Start()
     {
         //layerMask = LayerMask.GetMask("Obstacles");
+        area = GameObject.FindGameObjectWithTag("SpawnArea").GetComponent<BoxCollider2D>();
         RandomLocation();
     }
 

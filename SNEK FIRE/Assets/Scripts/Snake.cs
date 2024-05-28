@@ -13,7 +13,6 @@ public class Snake : MonoBehaviour
     [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
     [SerializeField] private Vector3 tailPositionBeforeMovement;            //Current position of the snake
     [SerializeField] private Vector2Int tailDirection;                      //Track tail direction
-    private float movementTimer = 0;
     [SerializeField] private float movementTimerMax = .25f;                 //[SPEED] Sets how long the interval is for each movement
 
     private List<Transform> bodyparts;
@@ -27,7 +26,7 @@ public class Snake : MonoBehaviour
         bodyparts = new List<Transform>();
         bodyparts.Add(this.transform);
 
-        movementTimer = movementTimerMax;                   //makes snake move at the start
+        StartCoroutine(MoveSnake());
     }
 
     // Update is called once per frame
@@ -88,19 +87,11 @@ public class Snake : MonoBehaviour
     private void FixedUpdate()
     {
         MovementInput1();
-        //StartCoroutine();
-
-        movementTimer += Time.deltaTime;
-        if (movementTimer >= movementTimerMax)
-        {            //Move snake when timer maxes out
-            MoveSnake();
-            movementTimer -= movementTimerMax;
-        }
     }
 
-    private void MoveSnake()
+    IEnumerator MoveSnake()
     {
-        if (alive)
+        while (alive)
         {
             //save tail position before moving
             if (bodyparts.Count > 1)
@@ -124,12 +115,9 @@ public class Snake : MonoBehaviour
                 );
 
             SetTailDirection(tailPositionBeforeMovement);
+            yield return new WaitForSeconds(movementTimerMax);
         }
     }
-    //IEnumerator MoveSnake()
-    //{
-    //    yield return new WaitForSeconds(movementTimerMax);
-    //}
     private void MoveBack()
     {
         //So that the snake doesn't clip through the wall when it dies

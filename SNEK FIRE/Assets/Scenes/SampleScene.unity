@@ -6376,6 +6376,10 @@ MonoBehaviour:
   horizontalInput: 0
   verticalInput: 0
   speed: 30
+  direction: {x: 1, y: 0}
+  currentPosition: {x: 0, y: 0}
+  tailDirection: {x: 0, y: 0}
+  movementTimerMax: 1
   bodyPrefab: {fileID: 4770450307657190208, guid: 5e038a1452b0b1146ae5aa89106636de, type: 3}
 --- !u!95 &1611188118
 Animator:

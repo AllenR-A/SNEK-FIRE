@@ -11,12 +11,14 @@ public class Snake : MonoBehaviour
 
 
     [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
-    [SerializeField] private Vector2Int currentPosition;                    //Current position of the snake
+    [SerializeField] private Vector3 positionBeforeMovement;                //Current position of the snake
     [SerializeField] private Vector2Int tailDirection;                      //Track tail direction
+    private float movementTimer = 0;
+    [SerializeField] private float movementTimerMax = .25f;                 //[SPEED] Sets how long the interval is for each movement
 
     private List<Transform> bodyparts;
     [SerializeField] private Transform bodyPrefab;
-    private bool alive = true;
+    [SerializeField] private bool alive = true;
     private bool attacking;
 
     // Start is called before the first frame update
@@ -24,12 +26,13 @@ public class Snake : MonoBehaviour
     {
         bodyparts = new List<Transform>();
         bodyparts.Add(this.transform);
+
+        movementTimer = movementTimerMax;                   //makes snake move at the start
     }
 
     // Update is called once per frame
     private void Update()
     {
-        MovementInput1();
     }
 
     private void MovementInput1() {
@@ -82,12 +85,24 @@ public class Snake : MonoBehaviour
         }
     }
 
-    private void FixedUpdate() {
-        MoveSnake();
+    private void FixedUpdate()
+    {
+        MovementInput1();
+        //StartCoroutine();
+
+        movementTimer += Time.deltaTime;
+        if (movementTimer >= movementTimerMax)
+        {            //Move snake when timer maxes out
+            MoveSnake();
+            movementTimer -= movementTimerMax;
+        }
     }
 
     private void MoveSnake()
     {
+        //only useful when only the head exists
+        positionBeforeMovement = new Vector3(this.transform.position.x, this.transform.position.y, 0);
+
         if (alive)
         {
             //Move Bodyparts
@@ -95,26 +110,35 @@ public class Snake : MonoBehaviour
             {
                 //Debug.Log("bodyparts[" + i + "].position = bodyparts[" + (i - 1) + "].position");
                 bodyparts[i].position = bodyparts[i - 1].position;              // position it to the one next to it (set to a lower number)
-            }
 
-            //Keep updating tail direction tracker
-            if (bodyparts.Count > 1) {
-                //Debug.Log("Body2ndtolasst POS: " + bodyparts[bodyparts.Count - 2].position);
-                //Debug.Log("Tail POS: " + bodyparts[bodyparts.Count - 1].position);
-                Vector3 getDirection = bodyparts[bodyparts.Count-2].position - bodyparts[bodyparts.Count - 1].position;
-                tailDirection = new Vector2Int((int)getDirection.x, (int)getDirection.y);
-                //Debug.Log("Tail Direction [Vector2Int]: " + tailDirection);
             }
 
             //Move Snake Head
-            this.transform.position = new Vector3(                              
+            this.transform.position = new Vector3(
                 this.transform.position.x + direction.x,
                 this.transform.position.y + direction.y,
                 0.0f
                 );
+
+            Vector3 getDirection = Vector3.zero;
+            //Keep updating tail direction tracker
+            if (bodyparts.Count > 1) {
+                //Debug.Log("Body2ndtolasst POS: " + bodyparts[bodyparts.Count - 2].position);
+                //Debug.Log("Tail POS: " + bodyparts[bodyparts.Count - 1].position);
+                getDirection = bodyparts[bodyparts.Count - 2].position - bodyparts[bodyparts.Count - 1].position;
+                //Debug.Log("Tail Direction [Vector2Int]: " + tailDirection);
+            } else {
+                //Get direction of Head (as it is also the current tail)
+                Vector3 positionAfterMovement = new Vector3((int)this.transform.position.x, (int)this.transform.position.y, 0);
+                getDirection = positionAfterMovement - positionBeforeMovement;
+            }
+            tailDirection = new Vector2Int((int)getDirection.x, (int)getDirection.y);
         }
     }
-
+    //IEnumerator MoveSnake()
+    //{
+    //    yield return new WaitForSeconds(movementTimerMax);
+    //}
     private void MoveBack()
     {
         //So that the snake doesn't clip through the wall when it dies
@@ -164,8 +188,15 @@ public class Snake : MonoBehaviour
 
     private void Grow(){
         Transform bodypart = Instantiate(this.bodyPrefab);              // spawn new bodypart (and get transform)
-        bodypart.position = bodyparts[bodyparts.Count - 1].position;    // set transform of new bodypart to the old one (replacing tail-end)
-        bodyparts.Add(bodypart);                                        // add this to the list of bodyparts
 
+        //Calculate position of the new tail end using the old tail direction to spawn it behind (the old way spawns it on the tail or head at the very first growth can cause a collision with itself)
+        Vector3 oldTailPosition = bodyparts[bodyparts.Count - 1].position;
+
+        //Debug.Log("OLD POS: " + oldTailPosition);
+        //Debug.Log("tailDirection X: " + tailDirection.x + "tailDirection Y: " + tailDirection.y);
+        Vector3 newTailPosition = oldTailPosition - new Vector3(tailDirection.x, tailDirection.y, 0);
+        //Debug.Log("NEW POS: " + newTailPosition);
+        bodypart.position = newTailPosition;                            // set transform of new bodypart to the old one (replacing tail-end)
+        bodyparts.Add(bodypart);                                        // add this to the list of bodyparts
     }
 }

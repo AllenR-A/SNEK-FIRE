@@ -11,6 +11,7 @@ public class Snake : MonoBehaviour
     [SerializeField] private float fire2Input;
 
     [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of head movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
+    [SerializeField] private Transform rotation;                            //Rotation of head
     [SerializeField] private Vector2Int bodyDirection;                      //Direction of Bodypart no.1 (used to prevent the head from colliding with the bodypart following it)
     [SerializeField] private Vector2Int tailDirection;                      //Track tail (last bodypart) direction
     [SerializeField] private Vector3 tailPositionBeforeMovement;            //Current position of the snake
@@ -19,9 +20,21 @@ public class Snake : MonoBehaviour
     private List<GameObject> bodyparts;
     [SerializeField] private GameObject bodyPrefab;
     [SerializeField] private bool alive = true;
-    private bool attacking;
+
+    [SerializeField] private GameObject fireBulletPrefab;
+    [SerializeField] private GameObject specialBulletPrefab;
+    [SerializeField] private Transform firePoint;
+    private bool isAttacking = false;
 
     private Animator playerAnim;
+    private Animator headAnim;
+
+    //================ Encapsulation ================
+    public bool IsAlive() { return alive; }
+    public void IsAlive(bool status) { alive = status; }
+    public bool IsAttacking() { return isAttacking; }
+    public void IsAttacking(bool status) { isAttacking = status; }
+    //================================================
 
     private ScoreManager scoreManager;
 
@@ -29,17 +42,18 @@ public class Snake : MonoBehaviour
     private void Start()
     {
         scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
+        
+        bodyparts = new List<GameObject>();                                         //create list
+        bodyparts.Add(gameObject);                                                  //add the head to the list
+        headAnim = bodyparts[0].GetComponent<Animator>();                           //bodyparts[0] is now the head of the snake
 
-        bodyparts = new List<GameObject>();
-        bodyparts.Add(gameObject);
-
-        StartCoroutine(MoveSnake());
+        StartCoroutine(MoveSnake());                                                //start the moving coroutine (the inputs are handled by Update() for per-frame updates)
     }
 
     // Update is called once per frame
     private void Update()
     {
-        Input1();
+        Input1();                                                                   //Check for inputs every frame
     }
 
     private void FixedUpdate()
@@ -78,8 +92,8 @@ public class Snake : MonoBehaviour
             { direction = Vector2Int.left; }
         }
 
-        if (fire1Input == 1) Fire1();
-        else if (fire2Input == 1) Fire2();
+        if (fire1Input == 1 && !isAttacking) StartCoroutine(Fire1());               //isAttacking prevents multiple calls (as this is updated every frame)
+        else if (fire2Input == 1 && !isAttacking) StartCoroutine(Fire2());          //isAttacking prevents multiple calls (as this is updated every frame)
 
     }
     private void Input2() {
@@ -106,16 +120,33 @@ public class Snake : MonoBehaviour
         }
     }
 
-    private void Fire1()
+    IEnumerator Fire1()
     {
-        playerAnim = bodyparts[0].GetComponent<Animator>();
-        playerAnim.SetTrigger("attack_t");                                          // PLAY ANIMATION
+        isAttacking = true;                                                         // enable flag to prevent multiple calls
+        headAnim.SetTrigger("attack_t");                                            // PLAY ANIMATION
+        Instantiate(fireBulletPrefab, firePoint.position, firePoint.rotation);      // spawn fire bullet
+        Debug.Log("Fire1() called");
+        yield return new WaitForSeconds(.69f);                                      // The animation is 41 frames (or around ~0.69s)
+        isAttacking = false;                                                        // disable flag after animation
     }
 
-    private void Fire2()
+    IEnumerator Fire2()
     {
-        playerAnim = bodyparts[0].GetComponent<Animator>();
-        playerAnim.SetTrigger("attack_t");                                          // PLAY ANIMATION
+        isAttacking = true;                                                         // enable flag to prevent multiple calls
+        headAnim.SetTrigger("attack_t");                                            // PLAY ANIMATION
+        Instantiate(specialBulletPrefab, firePoint.position, firePoint.rotation);   // spawn special bullet
+        Debug.Log("Fire2() called");
+        yield return new WaitForSeconds(.69f);                                      // The animation is 41 frames (or around ~0.69s)
+        isAttacking = false;                                                        // disable flag after animation
+    }
+
+    private void Teleport()
+    {
+        //Teleport Snake to the opposite side if it reaches the borders of the screen
+        if (transform.position.x == 0) transform.position = new Vector3(transform.position.x + 19, transform.position.y, 0.0f);
+        else if (transform.position.x == 20) transform.position = new Vector3(transform.position.x - 19, transform.position.y, 0.0f);
+        else if (transform.position.y == 0) transform.position = new Vector3(transform.position.x, transform.position.y + 9, 0.0f);
+        else if (transform.position.y == 10) transform.position = new Vector3(transform.position.x, transform.position.y - 9, 0.0f);
     }
 
     IEnumerator MoveSnake()
@@ -148,6 +179,7 @@ public class Snake : MonoBehaviour
             this.transform.eulerAngles = new Vector3(0, 0, GetAngleFromVector2Int(direction)+90);
 
             SetTailDirection(tailPositionBeforeMovement);
+            Teleport();                                                                         
             yield return new WaitForSeconds(movementIntervalForSPEED);
         }
     }
@@ -206,7 +238,7 @@ public class Snake : MonoBehaviour
 
     private void Death() {
         alive = false;      //must activate first [as MoveBack() makes the head crash into the body, making this run again]
-        for (int i = 0; i <= bodyparts.Count - 1; i++)
+        for (int i = 0; i <= bodyparts.Count - 1; i++)                              //using "<=" this time to loop through all the bodyparts from head -> tail
         {
             playerAnim = bodyparts[i].GetComponent<Animator>();
             playerAnim.SetBool("death_b", true);                                    // SET DEATH SPRITE FOR EACH BODYPART
@@ -223,7 +255,7 @@ public class Snake : MonoBehaviour
         } else if (other.tag == "Food"){
             scoreManager.UpdateScore(1);
             Grow();
-        } else if (other.tag == "Player" && alive){
+        } else if (other.tag == "PlayerBody" && alive){
             Debug.Log("YOU CRASHED ON YOURSELF.");
             Death();
         }

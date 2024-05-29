@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5272248348840203269}
   m_Layer: 3
   m_Name: SnakeBody
-  m_TagString: Player
+  m_TagString: PlayerBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

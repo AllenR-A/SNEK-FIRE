@@ -195,7 +195,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1374803993
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -575,7 +575,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1374803993
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -6468,12 +6468,16 @@ MonoBehaviour:
   fire1Input: 0
   fire2Input: 0
   direction: {x: 1, y: 0}
+  rotation: {fileID: 0}
   bodyDirection: {x: 0, y: 0}
   tailDirection: {x: 0, y: 0}
   tailPositionBeforeMovement: {x: 0, y: 0, z: 0}
   movementIntervalForSPEED: 0.24
   bodyPrefab: {fileID: 4106908797581284867, guid: 5e038a1452b0b1146ae5aa89106636de, type: 3}
   alive: 1
+  fireBulletPrefab: {fileID: 3577417842126513725, guid: 6c7d7cffd4e378940b91c904ab465c50, type: 3}
+  specialBulletPrefab: {fileID: 9058972118788965335, guid: 2f659457dc8788740959f4d445eaefad, type: 3}
+  firePoint: {fileID: 1919091576}
 --- !u!95 &1611188118
 Animator:
   serializedVersion: 5

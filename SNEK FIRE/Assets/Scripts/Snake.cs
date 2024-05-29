@@ -29,6 +29,24 @@ public class Snake : MonoBehaviour
     private Animator playerAnim;
     private Animator headAnim;
 
+    //================ Encapsulation ================
+    public bool IsAlive()
+    {
+        return alive;
+    }
+    public void IsAlive(bool status)
+    {
+        alive = status;
+    }
+    public bool IsAttacking()
+    {
+        return isAttacking;
+    }
+    public void IsAttacking(bool status)
+    {
+        isAttacking = status;
+    }
+    //================================================
     // Start is called before the first frame update
     private void Start()
     {
@@ -129,6 +147,7 @@ public class Snake : MonoBehaviour
         isAttacking = false;                                                        // disable flag after animation
     }
 
+    //
     private void Teleport()
     {
         if (this.transform.position.x == 0) {
@@ -193,7 +212,7 @@ public class Snake : MonoBehaviour
             this.transform.eulerAngles = new Vector3(0, 0, GetAngleFromVector2Int(direction)+90);
 
             SetTailDirection(tailPositionBeforeMovement);
-            Teleport();
+            Teleport();                                                                         
             yield return new WaitForSeconds(movementIntervalForSPEED);
         }
     }

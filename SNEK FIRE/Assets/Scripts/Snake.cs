@@ -79,17 +79,25 @@ public class Snake : MonoBehaviour
         bodyDirection = new Vector2Int((int)body1_Direction.x, (int)body1_Direction.y);
 
         if (verticalInput == 1) {
-            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.down))
-            { direction = Vector2Int.up; }
+            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.down)) {
+                if (bodyDirection == new Vector2Int(0, 8)) direction = Vector2Int.down;         //Keep going down (while body is teleported and moving down => Vector2Int(0,8))
+                else direction = Vector2Int.up;                                                 //Prevent going up (while body is moving down)
+            }          
         } else if (verticalInput == -1) {
-            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.up))
-            { direction = Vector2Int.down; }
+            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.up)) {
+                if (bodyDirection == new Vector2Int(0, -8)) direction = Vector2Int.up;          //Keep going up (while body is teleported and moving up => Vector2Int(0,-8))
+                else direction = Vector2Int.down;                                               //Prevent going down (while body is moving up)
+            }
         } else if(horizontalInput == 1) {
-            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.left))
-            { direction = Vector2Int.right; }
+            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.left)) {
+                if (bodyDirection == new Vector2Int(18, 0)) direction = Vector2Int.left;        //Keep going left (while body is teleported and moving left => Vector2Int(18,0))
+                else direction = Vector2Int.right;                                              //Prevent going right (while body is moving left)
+            }
         } else if (horizontalInput == -1) {
-            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.right))
-            { direction = Vector2Int.left; }
+            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.right)) {
+                if (bodyDirection == new Vector2Int(-18, 0)) direction = Vector2Int.right;      //Keep going right (while body is teleported and moving right => Vector2Int(-18,0))
+                else direction = Vector2Int.left;                                               //Prevent going left (while body is moving right)
+            }
         }
 
         if (fire1Input == 1 && !isAttacking) StartCoroutine(Fire1());               //isAttacking prevents multiple calls (as this is updated every frame)

@@ -13,6 +13,7 @@ TagManager:
   - BombBait
   - SpawnArea
   - PlayerBody
+  - DeadBody
   layers:
   - Default
   - TransparentFX

@@ -257,26 +257,24 @@ public class Snake : MonoBehaviour
 
     }
 
-    public void HandleBodyPartHit(GameObject hitBodyPart)
+    public void HandleBodyPartHit(GameObject hitBodyPart, float time)
     {
         int hitIndex = bodyparts.IndexOf(hitBodyPart);
         if (hitIndex != -1)
         {
 
-            // Destroy all body parts from hitIndex to the end
-            for (int i = bodyparts.Count - 1; i >= hitIndex; i--)
+            // Destroy all body parts from tail to hitIndex
+            for (int i = bodyparts.Count - 1; i > hitIndex; i--)                    // Don't include the exploded bodypart
             {
                 playerAnim = bodyparts[i].GetComponent<Animator>();
-                playerAnim.SetBool("death_b", true);                                  // SET DEATH SPRITE FOR EACH BODYPART
-                bodyparts[i].tag = "DeadBody";
-                bodyparts.RemoveAt(i);
+                playerAnim.SetBool("death_b", true);                                // SET DEATH SPRITE FOR EACH BODYPART
+                bodyparts[i].tag = "DeadBody";                                      // Change Tags to "DeadBody"
+                bodyparts.RemoveAt(i);                                              // Remove from list (detaches from the snake)
             }
+            bodyparts.RemoveAt(hitIndex);                                           // remove separately
 
-            playerAnim = bodyparts[hitIndex].GetComponent<Animator>();
-
-            // Optionally, you could add some effect or animation when parts are removed
             Debug.Log("Body parts destroyed starting from index: " + hitIndex);
-            StartCoroutine(AnimateAndDestroy(0.5f, hitBodyPart));
+            StartCoroutine(DelayDestroy(time, hitBodyPart));
         }
     }
 
@@ -290,9 +288,9 @@ public class Snake : MonoBehaviour
             for (int i = bodyparts.Count - 1; i >= hitIndex; i--)
             {
                 playerAnim = bodyparts[i].GetComponent<Animator>();
-                playerAnim.SetBool("death_b", true);                                  // SET DEATH SPRITE FOR EACH BODYPART
-                bodyparts[i].tag = "DeadBody";
-                bodyparts.RemoveAt(i);
+                playerAnim.SetBool("death_b", true);                                // SET DEATH SPRITE FOR EACH BODYPART
+                bodyparts[i].tag = "DeadBody";                                      // Change Tags to "DeadBody"
+                bodyparts.RemoveAt(i);                                              // Remove from list (detaches from the snake)
             }
 
             // Optionally, you could add some effect or animation when parts are removed
@@ -332,9 +330,8 @@ public class Snake : MonoBehaviour
         bodyparts.Add(bodypart);                                                    // add this to the list of bodyparts
     }
 
-    IEnumerator AnimateAndDestroy(float time, GameObject gO)
+    IEnumerator DelayDestroy(float time, GameObject gO)
     {
-        playerAnim.SetBool("explode_b", true);                  // PLAY EXPLOSION ANIMATION
         yield return new WaitForSeconds(time);                  // Wait for animation to end
         Destroy(gO);
     }

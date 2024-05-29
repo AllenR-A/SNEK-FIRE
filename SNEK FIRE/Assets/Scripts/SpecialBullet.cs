@@ -33,7 +33,7 @@ public class SpecialBullet : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {   
         // First collision
-        if (collision.CompareTag("PlayerBody") || collision.CompareTag("Wall"))
+        if (collision.CompareTag("PlayerBody") || collision.CompareTag("DeadBody") || collision.CompareTag("Wall"))
         {
             Debug.Log("Collision:" + collision.name);
             //StartCoroutine(Destroy3X3After(destructionDelay));
@@ -74,6 +74,7 @@ public class SpecialBullet : MonoBehaviour
     IEnumerator DestroyObjects(Collider2D[] colliders)
     {
         yield return new WaitForSeconds(0.25f);                     // This delay destroys the objects somewhere in the middle of the animation
+        
         //Start Destruction
         foreach (Collider2D collider in colliders)
         {
@@ -88,6 +89,12 @@ public class SpecialBullet : MonoBehaviour
                 }
             }
 
+            else if(collider.CompareTag("DeadBody"))
+            {
+                Debug.Log("Collision:" + collider.name);
+                Destroy(collider.gameObject);
+            }
+
             else if (collider.CompareTag("Wall"))
             {
                 //In a Collider2D[], this will only show up as 1 item (does not count the number of tiles), like the one above.
@@ -98,10 +105,9 @@ public class SpecialBullet : MonoBehaviour
                     Vector3 bulletPosition = transform.position;
                     Vector3Int cellPosition = tilemap.WorldToCell(bulletPosition);
 
-                    for (int x = -1; x <= 1; x++)
-                    {
-                        for (int y = -1; y <= 1; y++)
-                        {
+                    //iterate through the 3x3 area, setting tiles to null.
+                    for (int x = -1; x <= 1; x++) {
+                        for (int y = -1; y <= 1; y++) {
                             Vector3Int tilePosition = new Vector3Int(cellPosition.x + x, cellPosition.y + y, cellPosition.z);
                             tilemap.SetTile(tilePosition, null);
                         }

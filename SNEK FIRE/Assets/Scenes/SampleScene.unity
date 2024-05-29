@@ -7484,16 +7484,12 @@ SceneRoots:
   - {fileID: 519420032}
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
   - {fileID: 8653760228636330587}
 =======
   - {fileID: 1267071500}
 >>>>>>> parent of 9540a8a (Deleted some scene stuff)
 =======
 >>>>>>> parent of 37f8a33 (Brought Back GameManager)
-=======
-  - {fileID: 1267071500}
->>>>>>> parent of 9540a8a (Deleted some scene stuff)
   - {fileID: 1230528110}
   - {fileID: 1980003962}
   - {fileID: 1197403571}

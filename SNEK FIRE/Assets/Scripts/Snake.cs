@@ -30,23 +30,12 @@ public class Snake : MonoBehaviour
     private Animator headAnim;
 
     //================ Encapsulation ================
-    public bool IsAlive()
-    {
-        return alive;
-    }
-    public void IsAlive(bool status)
-    {
-        alive = status;
-    }
-    public bool IsAttacking()
-    {
-        return isAttacking;
-    }
-    public void IsAttacking(bool status)
-    {
-        isAttacking = status;
-    }
+    public bool IsAlive() { return alive; }
+    public void IsAlive(bool status) { alive = status; }
+    public bool IsAttacking() { return isAttacking; }
+    public void IsAttacking(bool status) { isAttacking = status; }
     //================================================
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -147,41 +136,15 @@ public class Snake : MonoBehaviour
         isAttacking = false;                                                        // disable flag after animation
     }
 
-    //
     private void Teleport()
     {
-        if (this.transform.position.x == 0) {
-            this.transform.position = new Vector3(
-                    this.transform.position.x + 19,
-                    this.transform.position.y,
-                    0.0f
-                    );
-        }
-        else if (this.transform.position.x == 20)
-        {
-            this.transform.position = new Vector3(
-                    this.transform.position.x - 19,
-                    this.transform.position.y,
-                    0.0f
-                    );
-        }
-        else if (this.transform.position.y == 0)
-        {
-            this.transform.position = new Vector3(
-                    this.transform.position.x,
-                    this.transform.position.y + 9,
-                    0.0f
-                    );
-        }
-        else if (this.transform.position.y == 10)
-        {
-            this.transform.position = new Vector3(
-                    this.transform.position.x,
-                    this.transform.position.y - 9,
-                    0.0f
-                    );
-        }
+        //Teleport Snake to the opposite side if it reaches the borders of the screen
+        if (transform.position.x == 0) transform.position = new Vector3(transform.position.x + 19, transform.position.y, 0.0f);
+        else if (transform.position.x == 20) transform.position = new Vector3(transform.position.x - 19, transform.position.y, 0.0f);
+        else if (transform.position.y == 0) transform.position = new Vector3(transform.position.x, transform.position.y + 9, 0.0f);
+        else if (transform.position.y == 10) transform.position = new Vector3(transform.position.x, transform.position.y - 9, 0.0f);
     }
+
     IEnumerator MoveSnake()
     {
         while (alive)

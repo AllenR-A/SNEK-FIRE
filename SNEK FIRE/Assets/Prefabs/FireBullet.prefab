@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5933173433247413394}
   - component: {fileID: -6865646853296834000}
   - component: {fileID: -3740897695264552951}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FireBullet
   m_TagString: Fire Bullet
   m_Icon: {fileID: 0}
@@ -74,8 +74,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2130092215
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -1039754420, guid: 93966d607ba481440ab661377d943657, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

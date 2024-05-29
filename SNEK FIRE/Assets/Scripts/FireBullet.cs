@@ -7,15 +7,18 @@ public class FireBullet : MonoBehaviour
     [SerializeField] private float speed = 14f;
     [SerializeField] private Rigidbody2D rb;
     private Animator bulletAnim;
+    private Snake snakeScript;
 
     // Start is called before the first frame update
     void Start()
     {
+        snakeScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Snake>();
+
         bulletAnim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = transform.right * speed;
         transform.Rotate(0, 0, 90);                     /*Rotate to the correct orientation after velocity is set
-                                                         (if this is done prior to setting velocity, it shoots into the wrong direction)*/
+                    snakeScript                                     (if this is done prior to setting velocity, it shoots into the wrong direction)*/
     }
 
     // Update is called once per frame
@@ -29,7 +32,17 @@ public class FireBullet : MonoBehaviour
         if (collision.CompareTag("PlayerBody"))
         {
             Debug.Log("Collision:" + collision.name);
-            Destroy(collision.gameObject);                      //DESTROY PART OF THE SNAKE
+            if (snakeScript != null)
+            {
+                // Call snake's method to handle body-part destruction
+                snakeScript.HandleBodyPartHit(collision.gameObject);
+            }
+        }
+
+        else if (collision.CompareTag("DeadBody"))
+        {
+            Debug.Log("Collision:" + collision.name);
+            StartCoroutine(AnimateAndDestroy(0.5f));            //Explode upon contact
         }
 
         else if (collision.CompareTag("Wall"))

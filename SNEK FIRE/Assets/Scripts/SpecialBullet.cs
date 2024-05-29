@@ -12,10 +12,13 @@ public class SpecialBullet : MonoBehaviour
 
     [SerializeField] private Vector2 boxSize = new Vector2(3, 3);   // Define the size of the 3x3 area
     private Animator bulletAnim;
+    private Snake snakeScript;
 
     // Start is called before the first frame update
     void Start()
     {
+        snakeScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Snake>();
+
         bulletAnim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = transform.right * speed;
@@ -70,17 +73,24 @@ public class SpecialBullet : MonoBehaviour
 
     IEnumerator DestroyObjects(Collider2D[] colliders)
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.25f);                     // This delay destroys the objects somewhere in the middle of the animation
         //Start Destruction
         foreach (Collider2D collider in colliders)
         {
             Debug.Log("Collider tag: " + collider.tag);
             if (collider.CompareTag("PlayerBody"))
             {
-                Destroy(collider.gameObject);
+                Debug.Log("Collision:" + collider.name);
+                if (snakeScript != null)
+                {
+                    // Call snake's method to handle body-part destruction
+                    snakeScript.HandleBodyPartHitSpecial(collider.gameObject);
+                }
             }
+
             else if (collider.CompareTag("Wall"))
             {
+                //In a Collider2D[], this will only show up as 1 item (does not count the number of tiles), like the one above.
                 Tilemap tilemap = collider.GetComponent<Tilemap>();
                 if (tilemap != null)
                 {

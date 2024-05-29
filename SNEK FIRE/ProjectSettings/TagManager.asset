@@ -12,6 +12,7 @@ TagManager:
   - Level Food
   - BombBait
   - SpawnArea
+  - PlayerBody
   layers:
   - Default
   - TransparentFX

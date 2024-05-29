@@ -158,6 +158,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 7.5
   rb: {fileID: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!50 &5856025083116468267
 Rigidbody2D:
   serializedVersion: 4

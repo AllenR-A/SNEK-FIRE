@@ -233,7 +233,7 @@ public class Snake : MonoBehaviour
             Death();
         } else if (other.tag == "Food"){
             Grow();
-        } else if (other.tag == "Player" && alive){
+        } else if (other.tag == "PlayerBody" && alive){
             Debug.Log("YOU CRASHED ON YOURSELF.");
             Death();
         }

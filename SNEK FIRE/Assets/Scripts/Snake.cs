@@ -30,19 +30,26 @@ public class Snake : MonoBehaviour
     private Animator headAnim;
 
     //================ Encapsulation ================
-    public bool IsAlive() { return alive; }
-    public void IsAlive(bool status) { alive = status; }
-    public bool IsAttacking() { return isAttacking; }
-    public void IsAttacking(bool status) { isAttacking = status; }
+    public bool IsAlive()
+    {
+        return alive;
+    }
+    public void IsAlive(bool status)
+    {
+        alive = status;
+    }
+    public bool IsAttacking()
+    {
+        return isAttacking;
+    }
+    public void IsAttacking(bool status)
+    {
+        isAttacking = status;
+    }
     //================================================
-
-    private ScoreManager scoreManager;
-
     // Start is called before the first frame update
     private void Start()
     {
-        scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
-        
         bodyparts = new List<GameObject>();                                         //create list
         bodyparts.Add(gameObject);                                                  //add the head to the list
         headAnim = bodyparts[0].GetComponent<Animator>();                           //bodyparts[0] is now the head of the snake
@@ -140,15 +147,41 @@ public class Snake : MonoBehaviour
         isAttacking = false;                                                        // disable flag after animation
     }
 
+    //
     private void Teleport()
     {
-        //Teleport Snake to the opposite side if it reaches the borders of the screen
-        if (transform.position.x == 0) transform.position = new Vector3(transform.position.x + 19, transform.position.y, 0.0f);
-        else if (transform.position.x == 20) transform.position = new Vector3(transform.position.x - 19, transform.position.y, 0.0f);
-        else if (transform.position.y == 0) transform.position = new Vector3(transform.position.x, transform.position.y + 9, 0.0f);
-        else if (transform.position.y == 10) transform.position = new Vector3(transform.position.x, transform.position.y - 9, 0.0f);
+        if (this.transform.position.x == 0) {
+            this.transform.position = new Vector3(
+                    this.transform.position.x + 19,
+                    this.transform.position.y,
+                    0.0f
+                    );
+        }
+        else if (this.transform.position.x == 20)
+        {
+            this.transform.position = new Vector3(
+                    this.transform.position.x - 19,
+                    this.transform.position.y,
+                    0.0f
+                    );
+        }
+        else if (this.transform.position.y == 0)
+        {
+            this.transform.position = new Vector3(
+                    this.transform.position.x,
+                    this.transform.position.y + 9,
+                    0.0f
+                    );
+        }
+        else if (this.transform.position.y == 10)
+        {
+            this.transform.position = new Vector3(
+                    this.transform.position.x,
+                    this.transform.position.y - 9,
+                    0.0f
+                    );
+        }
     }
-
     IEnumerator MoveSnake()
     {
         while (alive)
@@ -253,7 +286,6 @@ public class Snake : MonoBehaviour
             Debug.Log("YOU DIED.");
             Death();
         } else if (other.tag == "Food"){
-            scoreManager.UpdateScore(1);
             Grow();
         } else if (other.tag == "PlayerBody" && alive){
             Debug.Log("YOU CRASHED ON YOURSELF.");

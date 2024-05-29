@@ -129,6 +129,40 @@ public class Snake : MonoBehaviour
         isAttacking = false;                                                        // disable flag after animation
     }
 
+    private void Teleport()
+    {
+        if (this.transform.position.x == 0) {
+            this.transform.position = new Vector3(
+                    this.transform.position.x + 19,
+                    this.transform.position.y,
+                    0.0f
+                    );
+        }
+        else if (this.transform.position.x == 20)
+        {
+            this.transform.position = new Vector3(
+                    this.transform.position.x - 19,
+                    this.transform.position.y,
+                    0.0f
+                    );
+        }
+        else if (this.transform.position.y == 0)
+        {
+            this.transform.position = new Vector3(
+                    this.transform.position.x,
+                    this.transform.position.y + 9,
+                    0.0f
+                    );
+        }
+        else if (this.transform.position.y == 10)
+        {
+            this.transform.position = new Vector3(
+                    this.transform.position.x,
+                    this.transform.position.y - 9,
+                    0.0f
+                    );
+        }
+    }
     IEnumerator MoveSnake()
     {
         while (alive)
@@ -159,6 +193,7 @@ public class Snake : MonoBehaviour
             this.transform.eulerAngles = new Vector3(0, 0, GetAngleFromVector2Int(direction)+90);
 
             SetTailDirection(tailPositionBeforeMovement);
+            Teleport();
             yield return new WaitForSeconds(movementIntervalForSPEED);
         }
     }

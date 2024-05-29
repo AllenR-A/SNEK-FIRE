@@ -15,12 +15,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool randomTP = false;
     [SerializeField] private bool life = true;
      public TextMeshProUGUI gameOverText;
+     public GameObject titleScreen;
 
     private Snake snakeScript;
 
     // Start is called before the first frame update
     void Start()
     {
+        titleScreen.SetActive(true);
         snakeScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Snake>();
     }
 

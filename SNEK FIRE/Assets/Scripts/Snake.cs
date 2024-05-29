@@ -176,7 +176,7 @@ public class Snake : MonoBehaviour
                 );
 
             //Turn Snake Head
-            this.transform.eulerAngles = new Vector3(0, 0, GetAngleFromVector2Int(direction)+90);
+            if (direction != Vector2.zero) { this.transform.eulerAngles = new Vector3(0, 0, GetAngleFromVector2Int(direction) + 90); }
 
             SetTailDirection(tailPositionBeforeMovement);
             Teleport();                                                                         

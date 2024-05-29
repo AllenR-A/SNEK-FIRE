@@ -26,7 +26,6 @@ public class Snake : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        playerAnim = GetComponent<Animator>();
         bodyparts = new List<GameObject>();
         bodyparts.Add(gameObject);
 
@@ -105,11 +104,13 @@ public class Snake : MonoBehaviour
 
     private void Fire1()
     {
+        playerAnim = bodyparts[0].GetComponent<Animator>();
         playerAnim.SetTrigger("attack_t");                                          // PLAY ANIMATION
     }
 
     private void Fire2()
     {
+        playerAnim = bodyparts[0].GetComponent<Animator>();
         playerAnim.SetTrigger("attack_t");                                          // PLAY ANIMATION
     }
 
@@ -201,7 +202,11 @@ public class Snake : MonoBehaviour
 
     private void Death() {
         alive = false;      //must activate first [as MoveBack() makes the head crash into the body, making this run again]
-        playerAnim.SetBool("death_b", true);                                        // PLAY ANIMATION
+        for (int i = 0; i <= bodyparts.Count - 1; i++)
+        {
+            playerAnim = bodyparts[i].GetComponent<Animator>();
+            playerAnim.SetBool("death_b", true);                                    // SET DEATH SPRITE FOR EACH BODYPART
+        }
         MoveBack();
 
     }

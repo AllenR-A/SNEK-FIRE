@@ -19,23 +19,25 @@ public class Snake : MonoBehaviour
     private List<GameObject> bodyparts;
     [SerializeField] private GameObject bodyPrefab;
     [SerializeField] private bool alive = true;
-    private bool attacking;
+    private bool isAttacking = false;
 
     private Animator playerAnim;
+    private Animator headAnim;
 
     // Start is called before the first frame update
     private void Start()
     {
-        bodyparts = new List<GameObject>();
-        bodyparts.Add(gameObject);
+        bodyparts = new List<GameObject>();                                         //create list
+        bodyparts.Add(gameObject);                                                  //add the head to the list
+        headAnim = bodyparts[0].GetComponent<Animator>();                           //bodyparts[0] is now the head of the snake
 
-        StartCoroutine(MoveSnake());
+        StartCoroutine(MoveSnake());                                                //start the moving coroutine (the inputs are handled by Update() for per-frame updates)
     }
 
     // Update is called once per frame
     private void Update()
     {
-        Input1();
+        Input1();                                                                   //Check for inputs every frame
     }
 
     private void FixedUpdate()
@@ -74,8 +76,8 @@ public class Snake : MonoBehaviour
             { direction = Vector2Int.left; }
         }
 
-        if (fire1Input == 1) Fire1();
-        else if (fire2Input == 1) Fire2();
+        if (fire1Input == 1 && !isAttacking) StartCoroutine(Fire1());               //isAttacking prevents multiple calls (as this is updated every frame)
+        else if (fire2Input == 1 && !isAttacking) StartCoroutine(Fire2());          //isAttacking prevents multiple calls (as this is updated every frame)
 
     }
     private void Input2() {
@@ -102,16 +104,24 @@ public class Snake : MonoBehaviour
         }
     }
 
-    private void Fire1()
+    IEnumerator Fire1()
     {
-        playerAnim = bodyparts[0].GetComponent<Animator>();
-        playerAnim.SetTrigger("attack_t");                                          // PLAY ANIMATION
+        isAttacking = true;                                                         // enable flag to prevent multiple calls
+        //Code to launch regular Fire Bullet from FirePoint GameObject
+        headAnim.SetTrigger("attack_t");                                            // PLAY ANIMATION
+        Debug.Log("Fire1() called");
+        yield return new WaitForSeconds(.69f);                                      // The animation is 41 frames (or around ~0.69s)
+        isAttacking = false;                                                        // disable flag after animation
     }
 
-    private void Fire2()
+    IEnumerator Fire2()
     {
-        playerAnim = bodyparts[0].GetComponent<Animator>();
-        playerAnim.SetTrigger("attack_t");                                          // PLAY ANIMATION
+        isAttacking = true;                                                         // enable flag to prevent multiple calls
+        //Code to launch Special Bullet from FirePoint GameObject
+        headAnim.SetTrigger("attack_t");                                            // PLAY ANIMATION
+        Debug.Log("Fire2() called");
+        yield return new WaitForSeconds(.69f);                                      // The animation is 41 frames (or around ~0.69s)
+        isAttacking = false;                                                        // disable flag after animation
     }
 
     IEnumerator MoveSnake()
@@ -202,7 +212,7 @@ public class Snake : MonoBehaviour
 
     private void Death() {
         alive = false;      //must activate first [as MoveBack() makes the head crash into the body, making this run again]
-        for (int i = 0; i <= bodyparts.Count - 1; i++)
+        for (int i = 0; i <= bodyparts.Count - 1; i++)                              //using "<=" this time to loop through all the bodyparts from head -> tail
         {
             playerAnim = bodyparts[i].GetComponent<Animator>();
             playerAnim.SetBool("death_b", true);                                    // SET DEATH SPRITE FOR EACH BODYPART

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int specialBulletsMax = 7;
     [SerializeField] private bool randomTP = false;
     [SerializeField] private bool life = true;
+     public TextMeshProUGUI gameOverText;
 
     private Snake snakeScript;
 
@@ -25,8 +27,15 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (snakeScript.IsAlive()) { life = true; }
-        else { life = false; }
+        if (snakeScript.IsAlive())
+        {
+            life = true;
+            }
+        else
+        {
+            life = false;
+            gameOverText.gameObject.SetActive(true);
+        }
 
     }
 }

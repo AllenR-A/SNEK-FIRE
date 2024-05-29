@@ -23,9 +23,13 @@ public class Snake : MonoBehaviour
 
     private Animator playerAnim;
 
+    private ScoreManager scoreManager;
+
     // Start is called before the first frame update
     private void Start()
     {
+        scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
+
         bodyparts = new List<GameObject>();
         bodyparts.Add(gameObject);
 
@@ -217,6 +221,7 @@ public class Snake : MonoBehaviour
             Debug.Log("YOU DIED.");
             Death();
         } else if (other.tag == "Food"){
+            scoreManager.UpdateScore(1);
             Grow();
         } else if (other.tag == "Player" && alive){
             Debug.Log("YOU CRASHED ON YOURSELF.");

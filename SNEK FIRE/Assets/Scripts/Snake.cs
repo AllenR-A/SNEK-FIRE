@@ -11,6 +11,7 @@ public class Snake : MonoBehaviour
     [SerializeField] private float fire2Input;
 
     [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of head movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
+    [SerializeField] private Transform rotation;                            //Rotation of head
     [SerializeField] private Vector2Int bodyDirection;                      //Direction of Bodypart no.1 (used to prevent the head from colliding with the bodypart following it)
     [SerializeField] private Vector2Int tailDirection;                      //Track tail (last bodypart) direction
     [SerializeField] private Vector3 tailPositionBeforeMovement;            //Current position of the snake
@@ -19,6 +20,10 @@ public class Snake : MonoBehaviour
     private List<GameObject> bodyparts;
     [SerializeField] private GameObject bodyPrefab;
     [SerializeField] private bool alive = true;
+
+    [SerializeField] private GameObject fireBulletPrefab;
+    [SerializeField] private GameObject specialBulletPrefab;
+    [SerializeField] private Transform firePoint;
     private bool isAttacking = false;
 
     private Animator playerAnim;
@@ -107,8 +112,8 @@ public class Snake : MonoBehaviour
     IEnumerator Fire1()
     {
         isAttacking = true;                                                         // enable flag to prevent multiple calls
-        //Code to launch regular Fire Bullet from FirePoint GameObject
         headAnim.SetTrigger("attack_t");                                            // PLAY ANIMATION
+        Instantiate(fireBulletPrefab, firePoint.position, firePoint.rotation);      // spawn fire bullet
         Debug.Log("Fire1() called");
         yield return new WaitForSeconds(.69f);                                      // The animation is 41 frames (or around ~0.69s)
         isAttacking = false;                                                        // disable flag after animation
@@ -117,8 +122,8 @@ public class Snake : MonoBehaviour
     IEnumerator Fire2()
     {
         isAttacking = true;                                                         // enable flag to prevent multiple calls
-        //Code to launch Special Bullet from FirePoint GameObject
         headAnim.SetTrigger("attack_t");                                            // PLAY ANIMATION
+        Instantiate(specialBulletPrefab, firePoint.position, firePoint.rotation);   // spawn special bullet
         Debug.Log("Fire2() called");
         yield return new WaitForSeconds(.69f);                                      // The animation is 41 frames (or around ~0.69s)
         isAttacking = false;                                                        // disable flag after animation

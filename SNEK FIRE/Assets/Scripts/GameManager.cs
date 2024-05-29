@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool life = true;
      public TextMeshProUGUI gameOverText;
      public GameObject titleScreen;
+     public bool isGameActive;
+
 
     private Snake snakeScript;
 
@@ -24,6 +26,7 @@ public class GameManager : MonoBehaviour
     {
         titleScreen.SetActive(true);
         snakeScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Snake>();
+        isGameActive = false;
     }
 
     // Update is called once per frame
@@ -37,11 +40,14 @@ public class GameManager : MonoBehaviour
         {
             life = false;
             gameOverText.gameObject.SetActive(true);
-        }
+            }
 
     }
 
-    public void StartGame(){
-
+    public void StartGame()
+    {
+        titleScreen.SetActive(false);
+        isGameActive = true;
+        gameOverText.gameObject.SetActive(false);
     }
 }

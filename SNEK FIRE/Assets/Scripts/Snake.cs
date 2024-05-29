@@ -10,7 +10,7 @@ public class Snake : MonoBehaviour
     [SerializeField] private float fire1Input;
     [SerializeField] private float fire2Input;
 
-    [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of head movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
+    [SerializeField] private Vector2Int direction = Vector2Int.zero;        //Direction of head movement [using Vectroe2Int makes sure it sticks to the grid]
     [SerializeField] private Transform rotation;                            //Rotation of head
     [SerializeField] private Vector2Int bodyDirection;                      //Direction of Bodypart no.1 (used to prevent the head from colliding with the bodypart following it)
     [SerializeField] private Vector2Int tailDirection;                      //Track tail (last bodypart) direction
@@ -210,6 +210,8 @@ public class Snake : MonoBehaviour
             tail.transform.position.y + reverseDirection.y,
             0.0f
             );
+
+        Teleport();
     }
 
     private float GetAngleFromVector2Int(Vector2Int direction)

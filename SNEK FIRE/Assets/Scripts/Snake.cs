@@ -249,6 +249,50 @@ public class Snake : MonoBehaviour
 
     }
 
+    public void HandleBodyPartHit(GameObject hitBodyPart)
+    {
+        int hitIndex = bodyparts.IndexOf(hitBodyPart);
+        if (hitIndex != -1)
+        {
+
+            // Destroy all body parts from hitIndex to the end
+            for (int i = bodyparts.Count - 1; i >= hitIndex; i--)
+            {
+                playerAnim = bodyparts[i].GetComponent<Animator>();
+                playerAnim.SetBool("death_b", true);                                  // SET DEATH SPRITE FOR EACH BODYPART
+                bodyparts[i].tag = "DeadBody";
+                bodyparts.RemoveAt(i);
+            }
+
+            playerAnim = bodyparts[hitIndex].GetComponent<Animator>();
+
+            // Optionally, you could add some effect or animation when parts are removed
+            Debug.Log("Body parts destroyed starting from index: " + hitIndex);
+            StartCoroutine(AnimateAndDestroy(0.5f, hitBodyPart));
+        }
+    }
+
+    public void HandleBodyPartHitSpecial(GameObject hitBodyPart)
+    {
+        // This one is the same as above. It just doesn't have animations (since that one is already handled by the special bullet).
+        int hitIndex = bodyparts.IndexOf(hitBodyPart);
+        if (hitIndex != -1)
+        {
+            // Destroy all body parts from hitIndex to the end
+            for (int i = bodyparts.Count - 1; i >= hitIndex; i--)
+            {
+                playerAnim = bodyparts[i].GetComponent<Animator>();
+                playerAnim.SetBool("death_b", true);                                  // SET DEATH SPRITE FOR EACH BODYPART
+                bodyparts[i].tag = "DeadBody";
+                bodyparts.RemoveAt(i);
+            }
+
+            // Optionally, you could add some effect or animation when parts are removed
+            Debug.Log("Body parts destroyed starting from index: " + hitIndex);
+            Destroy(hitBodyPart);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Wall" && alive) {
@@ -278,5 +322,12 @@ public class Snake : MonoBehaviour
         bodypart.transform.position = newTailPosition;                                        // set transform of new bodypart to the old one (replacing tail-end)
         bodypart.transform.eulerAngles = oldTailRotation;                                     // set rotation of new bodypart to the old one (replacing tail-end)
         bodyparts.Add(bodypart);                                                    // add this to the list of bodyparts
+    }
+
+    IEnumerator AnimateAndDestroy(float time, GameObject gO)
+    {
+        playerAnim.SetBool("explode_b", true);                  // PLAY EXPLOSION ANIMATION
+        yield return new WaitForSeconds(time);                  // Wait for animation to end
+        Destroy(gO);
     }
 }

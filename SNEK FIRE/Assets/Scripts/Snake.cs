@@ -21,6 +21,7 @@ public class Snake : MonoBehaviour
     private List<GameObject> bodyparts;
     [SerializeField] private GameObject bodyPrefab;
     [SerializeField] private bool alive = true;
+    public int eat;
 
     //Bullets
     [SerializeField] private GameObject fireBulletPrefab;
@@ -37,6 +38,8 @@ public class Snake : MonoBehaviour
     //Outside scripts
     private Food foodScript;
     private FoodLarge foodLargeScript;
+    private GameManager gameManager;
+    private ScoreManager scoreManager;
 
     //================ Encapsulation ================
     public bool IsAlive() { return alive; }
@@ -49,11 +52,11 @@ public class Snake : MonoBehaviour
     public void CanFireSpecial(bool status) { canFireSpecial = status; }
     //================================================
 
-    private ScoreManager scoreManager;
 
     // Start is called before the first frame update
     private void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
         
         bodyparts = new List<GameObject>();                                         //create list
@@ -341,7 +344,9 @@ public class Snake : MonoBehaviour
         }
     }
 
-    private void Grow(){
+    private void Grow()
+    {
+        eat += 1;
         GameObject bodypart = Instantiate(this.bodyPrefab);                          // spawn new bodypart (and get transform)
 
         /*Calculate position of the new tail end using the old tail direction to spawn it behind

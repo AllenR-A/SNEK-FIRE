@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private int score;
     [SerializeField] private int scoreMultiplier;
+    public int eatNumber;
+    [SerializeField] private int lastEatMilestone = 0;
     [SerializeField] private int length;
     [SerializeField] private int level;
     [SerializeField] private int fireBullets;
@@ -21,11 +23,17 @@ public class GameManager : MonoBehaviour
     private Snake snakeScript;
     private ScoreManager scoreScript;
 
+    public GameObject bombPrefab;
+    public GameObject foodLargePrefab;
+    public GameObject specialFoodPrefab;
+
     //================ Encapsulation ================
     public int GetScore() { return score; }
     public void SetScore(int n) { score = n; }
     public int GetScoreMultiplier() { return scoreMultiplier; }
     public void SetScoreMultiplier(int n) { scoreMultiplier = n; }
+    public int GetEatNumber() { return eatNumber; }
+    public void SetEatNumber(int n) { eatNumber += n; }
     public int GetLength() { return length; }
     public void SetLength(int n) { length = n; }
     public int GetLevel() { return level; }
@@ -48,6 +56,7 @@ public class GameManager : MonoBehaviour
         snakeScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Snake>();
         scoreScript = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
         titleScreen.SetActive(true);
+
     }
 
     // Update is called once per frame
@@ -55,6 +64,12 @@ public class GameManager : MonoBehaviour
     {
         length = snakeScript.GetBodyPartCount();
         score = scoreScript.currentScore;
+        eatNumber = snakeScript.eat;
+
+        if (length == 10) { Instantiate(bombPrefab); }
+        else if (length == 15) { Instantiate(foodLargePrefab); }
+
+        CheckEatMilestone();
 
         if (snakeScript.IsAlive()) {
         life = true;
@@ -64,16 +79,15 @@ public class GameManager : MonoBehaviour
             //GameOver();
         }
     }
+    public void CheckEatMilestone()
+    {
+        eatNumber++; // Increment eatNumber
 
-    private void StartGame(){
-
+        // Check if eatNumber has reached the next multiple of 20
+        if (eatNumber >= lastEatMilestone + 20)
+        {
+            lastEatMilestone += 20; // Update the last milestone to the current one
+            Instantiate(specialFoodPrefab); // Call the method to perform the desired action
+        }
     }
-    private void PauseMenu(){
-        pauseMenu.SetActive(true);
-    }
-
-    private void GameOver(){
-        gameOverMenu.SetActive(true);
-    }
-
 }

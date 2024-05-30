@@ -18,10 +18,10 @@ public class BombBait : MonoBehaviour
     void Start()
     {
         foodScript = GameObject.FindGameObjectWithTag("Food").GetComponent<Food>();
-
         bombAnim = GetComponent<Animator>();
-        //layerMask = LayerMask.GetMask("Obstacles");
+
         area = GameObject.FindGameObjectWithTag("SpawnArea").GetComponent<BoxCollider2D>();
+        layerMask = LayerMask.GetMask("Obstacles");
         RandomLocation();
     }
 

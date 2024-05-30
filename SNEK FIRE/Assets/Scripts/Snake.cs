@@ -37,6 +37,7 @@ public class Snake : MonoBehaviour
     //Outside scripts
     private Food foodScript;
     private FoodLarge foodLargeScript;
+    private ScoreManager scoreManager;
 
     //================ Encapsulation ================
     public bool IsAlive() { return alive; }
@@ -51,6 +52,7 @@ public class Snake : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
         bodyparts = new List<GameObject>();                                         //create list
         bodyparts.Add(gameObject);                                                  //add the head to the list
         headAnim = bodyparts[0].GetComponent<Animator>();                           //bodyparts[0] is now the head of the snake

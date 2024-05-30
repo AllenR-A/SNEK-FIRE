@@ -84,12 +84,4 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void PauseMenu(){
-        pauseMenu.SetActive(true);
-    }
-
-    private void GameOver(){
-        gameOverMenu.SetActive(true);
-    }
-
 }

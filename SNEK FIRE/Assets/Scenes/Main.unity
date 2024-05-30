@@ -6403,9 +6403,9 @@ MonoBehaviour:
   pauseMenu: {fileID: 0}
   titleScreen: {fileID: 0}
   gameOverMenu: {fileID: 0}
-  bombPrefab: {fileID: 7716608270550443861, guid: ccce91e32e7b4c143a7de4527430e28a, type: 3}
-  foodLargePrefab: {fileID: 3751483418869056439, guid: e734853310f6deb4bbea42c74c685ac4, type: 3}
-  specialFoodPrefab: {fileID: 1164081453487902017, guid: 662fd48580adb9c43983ffe337a966fe, type: 3}
+  bombPrefab: {fileID: 0}
+  foodLargePrefab: {fileID: 0}
+  specialFoodPrefab: {fileID: 0}
 --- !u!4 &1581045013
 Transform:
   m_ObjectHideFlags: 0
@@ -6608,7 +6608,7 @@ MonoBehaviour:
   alive: 1
   layerMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
   eat: 0
   fireBulletPrefab: {fileID: 3577417842126513725, guid: 6c7d7cffd4e378940b91c904ab465c50, type: 3}
   specialBulletPrefab: {fileID: 9058972118788965335, guid: 2f659457dc8788740959f4d445eaefad, type: 3}
@@ -6705,7 +6705,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Score: 0000000'
+  m_text: 'Score: \n0000000'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3a3f528557358b642b9cfb96035f3ff7, type: 2}
   m_sharedMaterial: {fileID: 5144704616683876841, guid: 3a3f528557358b642b9cfb96035f3ff7, type: 2}
@@ -6768,7 +6768,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 48.36775, w: 0}
+  m_margin: {x: 0, y: 0, z: 47.86193, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

@@ -10381,7 +10381,7 @@ MonoBehaviour:
   multiplier1: {x: 20, y: 21, z: 0}
   multiplier2: {x: 21, y: 21, z: 0}
   level1: {x: 21, y: 20, z: 0}
-  tilemap: {fileID: 0}
+  tilemap: {fileID: 29729237}
 --- !u!4 &1573848282813168198
 Transform:
   m_ObjectHideFlags: 0

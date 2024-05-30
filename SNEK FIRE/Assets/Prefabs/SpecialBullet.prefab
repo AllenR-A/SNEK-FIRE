@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5e2c25ed85c2e54294fc0f825e04799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 7
+  speed: 12
   destructionDelay: 0.1
   rb: {fileID: 0}
   layerMask:

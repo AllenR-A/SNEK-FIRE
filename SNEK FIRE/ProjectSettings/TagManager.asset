@@ -16,6 +16,7 @@ TagManager:
   - DeadBody
   - FoodLarge
   - GameManager
+  - AntiSpawn
   layers:
   - Default
   - TransparentFX

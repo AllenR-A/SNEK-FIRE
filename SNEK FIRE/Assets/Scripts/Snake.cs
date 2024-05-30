@@ -21,6 +21,7 @@ public class Snake : MonoBehaviour
     private List<GameObject> bodyparts;
     [SerializeField] private GameObject bodyPrefab;
     [SerializeField] private bool alive = true;
+    [SerializeField] private LayerMask layerMask;                           //set Layer to check against for detecting what the head should avoid
     public int eat;
 
     //Bullets
@@ -64,6 +65,7 @@ public class Snake : MonoBehaviour
         headAnim = bodyparts[0].GetComponent<Animator>();                           //bodyparts[0] is now the head of the snake
 
         StartCoroutine(MoveSnake());                                                //start the moving coroutine (the inputs are handled by Update() for per-frame updates)
+        StartCoroutine(CheckSpawn());
     }
 
     // Update is called once per frame
@@ -322,23 +324,38 @@ public class Snake : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Wall" && alive) {
-            Debug.Log("YOU DIED.");
+            Debug.Log("YOU DIED (Wall).");
             Death();
-        } else if (other.tag == "Food") {
+        }
+        else if (other.tag == "Food") {
             Debug.Log("YOU ate.");
             foodScript = other.gameObject.GetComponent<Food>();
             scoreManager.UpdateScore(foodScript.GetPoints());
             Grow();
-        } else if (other.tag == "FoodLarge") {
+        }
+        else if (other.tag == "FoodLarge") {
             Debug.Log("YOU ATE.");
             foodLargeScript = other.gameObject.GetComponent<FoodLarge>();
             scoreManager.UpdateScore(foodLargeScript.GetPoints());
             StartCoroutine(GrowTwice(movementIntervalForSPEED));    //set double-growth speed to match snake speed
         }
+        else if (other.tag == "Level Food") {
+            Debug.Log("YOU AT-.");
+            //scene change
+        }
+        else if (other.tag == "Special Food") {
+            Debug.Log("You ate special.");
+            //handled on the item itself
+        }
         else if (other.tag == "PlayerBody" && alive){
             Debug.Log("YOU CRASHED ON YOURSELF.");
             Death();
-        } else if (other.tag == "BombBait" && alive) {
+        }
+        else if (other.tag == "DeadBody" && alive) {
+            Debug.Log("YOU CRASHED ON YOURDEADSELF.");
+            Death();
+        }
+        else if (other.tag == "BombBait" && alive) {
             Debug.Log("YOU GOT JEBAITED *BOOM*.");
             Death();
         }
@@ -346,8 +363,9 @@ public class Snake : MonoBehaviour
 
     private void Grow()
     {
-        eat += 1;
-        GameObject bodypart = Instantiate(this.bodyPrefab);                          // spawn new bodypart (and get transform)
+        eat += 1;                                                                   // count how much has been eaten
+        
+        GameObject bodypart = Instantiate(this.bodyPrefab);                         // spawn new bodypart (and get transform)
 
         /*Calculate position of the new tail end using the old tail direction to spawn it behind
         (the old way spawns it on the tail or head at the very first growth can cause a collision with itself) */
@@ -358,9 +376,10 @@ public class Snake : MonoBehaviour
         //Debug.Log("[GROW()] tailDirection X: " + tailDirection.x + "tailDirection Y: " + tailDirection.y);
         Vector3 newTailPosition = oldTailPosition - new Vector3(tailDirection.x, tailDirection.y, 0);   //Offsetting new body
         //Debug.Log("[GROW()] NEW POS: " + newTailPosition);
-        bodypart.transform.position = newTailPosition;                                        // set transform of new bodypart to the old one (replacing tail-end)
-        bodypart.transform.eulerAngles = oldTailRotation;                                     // set rotation of new bodypart to the old one (replacing tail-end)
+        bodypart.transform.position = newTailPosition;                              // set transform of new bodypart to the old one (replacing tail-end)
+        bodypart.transform.eulerAngles = oldTailRotation;                           // set rotation of new bodypart to the old one (replacing tail-end)
         bodyparts.Add(bodypart);                                                    // add this to the list of bodyparts
+        gameManager.UpdateSpawnAndAmmo();                                           // Helps update when to spawn objects or give ammo
     }
 
     IEnumerator GrowTwice(float time)
@@ -370,9 +389,47 @@ public class Snake : MonoBehaviour
         Grow();
     }
 
+    IEnumerator CheckSpawn()
+    {
+        while (alive)
+        {
+            // Get all colliders in a 1x5 area (turns with the snake)
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, new Vector2(1, 5), GetAngleFromVector2Int(direction)+90, layerMask);
+
+            //Start Destruction
+            foreach (Collider2D collider in colliders)
+            {
+                if (collider.CompareTag("BombBait"))
+                {
+                    Debug.Log("================>");
+                    BombBait script = collider.GetComponent<BombBait>();
+                    if (!script.active)
+                    {
+                        script.RandomLocation();
+                        Debug.Log("================>[Bomb Moved]");
+                    }
+                }
+
+            }
+            yield return new WaitForSeconds(0.25f);
+        }
+
+    }
+
     IEnumerator DelayDestroy(float time, GameObject gO)
     {
         yield return new WaitForSeconds(time);                  // Wait for animation to end
         Destroy(gO);
+    }
+
+
+    // Draw the overlap box in the editor for debugging
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Vector3 box = Vector3.zero;
+        if(direction == Vector2Int.down|| direction == Vector2Int.up) box = new Vector3(1, 5, 0);
+        else if (direction == Vector2Int.left || direction == Vector2Int.right) box = new Vector3(5, 1, 0);
+        Gizmos.DrawWireCube(transform.position, box);
     }
 }

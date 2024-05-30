@@ -32,7 +32,7 @@ public class SpecialBullet : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
-    {   
+    {
         // First collision
         if (collision.CompareTag("PlayerBody") || collision.CompareTag("DeadBody") || collision.CompareTag("Wall"))
         {

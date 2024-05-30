@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int specialBulletsMax = 7;
     [SerializeField] private bool randomTP = false;
     [SerializeField] private bool life = true;
+    public GameObject pauseMenu;
+    public GameObject titleScreen;
+    public GameObject gameOverMenu;
 
     private Snake snakeScript;
 
@@ -20,13 +23,29 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         snakeScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Snake>();
+        titleScreen.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (snakeScript.IsAlive()) { life = true; }
-        else { life = false; }
+        if (snakeScript.IsAlive()) {
+        life = true;
+        }
+        else {
+        life = false;
+        }
+    }
+
+    private void StartGame(){
 
     }
+    private void PauseMenu(){
+        pauseMenu.SetActive(true);
+    }
+
+    private void GameOver(){
+        gameOverMenu.SetActive(true);
+    }
+
 }

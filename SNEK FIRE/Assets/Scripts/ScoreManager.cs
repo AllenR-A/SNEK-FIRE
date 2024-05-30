@@ -28,9 +28,9 @@ public class ScoreManager : MonoBehaviour
         {
             if (currentScore > PlayerPrefs.GetInt("SavedHighScore"))
             {
-                PlayerPrefs.SetIn("SavedHighScore", currentScore);
+                PlayerPrefs.SetInt("SavedHighScore", currentScore);
             } else {
-                PlayerPrefs.SetIn("SavedHighScore", currentScore);
+                PlayerPrefs.SetInt("SavedHighScore", currentScore);
             }
 
             finalScoreText.text = currentScore.ToString();

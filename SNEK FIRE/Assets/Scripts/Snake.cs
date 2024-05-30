@@ -311,6 +311,10 @@ public class Snake : MonoBehaviour
             Destroy(hitBodyPart);
         }
     }
+    public int GetBodyPartCount()
+    {
+        return bodyparts.Count;
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {

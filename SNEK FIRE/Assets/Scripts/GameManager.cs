@@ -48,11 +48,14 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        length = snakeScript.GetBodyPartCount();
+
         if (snakeScript.IsAlive()) {
         life = true;
         }
         else {
-        life = false;
+            life = false;
+            //GameOver();
         }
     }
 

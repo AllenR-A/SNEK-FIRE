@@ -50,7 +50,6 @@ public class ScoreTileUpdater : MonoBehaviour
 
     private GameManager gameManager;
 
-    [ContextMenu("Paint")]
     void Paint()
     {
         tilemap.SetTile(heart1, heartFull);
@@ -60,4 +59,65 @@ public class ScoreTileUpdater : MonoBehaviour
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
+
+    private void Update()
+    {
+        UpdateUI();                 //Keep Updating
+    }
+
+    private void UpdateUI()
+    {
+        UpdateHearts();             //Update Life Status
+        UpdateSpecialAmmo();        //Update Special Ammo Amount
+        UpdateBulletCount();        //Update Regular Ammo Amount
+        UpdateMultiplier();         //Update Score Multiplier
+    }
+
+
+    private void UpdateHearts()
+    {
+        tilemap.SetTile(heart1, gameManager.IsAlive() ? heartFull : heartEmpty);
+    }
+
+    private void UpdateSpecialAmmo()
+    {
+        int specialBullets = gameManager.GetSpecialBullets();
+        Vector3Int[] positions = { specialAmmo1, specialAmmo2, specialAmmo3, specialAmmo4, specialAmmo5, specialAmmo6, specialAmmo7 };
+        for (int i = 0; i < positions.Length; i++)
+        {
+            tilemap.SetTile(positions[i], i < specialBullets ? specialAmmo : null);     //iterate through the tiles and set either an ammo idicator or null.
+        }
+    }
+
+    private void UpdateBulletCount()
+    {
+        int bullets = gameManager.GetFireBullets();
+        SetTileForNumber(bulletCount1, bullets / 10);       //get tens and set them to the correct tile using switch statements
+        SetTileForNumber(bulletCount2, bullets % 10);       //get units and set them to the correct tile using switch statements
+    }
+
+    private void UpdateMultiplier()
+    {
+        int multiplier = gameManager.GetScoreMultiplier();
+        SetTileForNumber(multiplier1, multiplier / 10);     //get tens and set them to the correct tile using switch statements
+        SetTileForNumber(multiplier2, multiplier % 10);     //get units and set them to the correct tile using switch statements
+    }
+
+    private void SetTileForNumber(Vector3Int position, int number)
+    {
+        switch (number)
+        {
+            case 0: tilemap.SetTile(position, num0); break;
+            case 1: tilemap.SetTile(position, num1); break;
+            case 2: tilemap.SetTile(position, num2); break;
+            case 3: tilemap.SetTile(position, num3); break;
+            case 4: tilemap.SetTile(position, num4); break;
+            case 5: tilemap.SetTile(position, num5); break;
+            case 6: tilemap.SetTile(position, num6); break;
+            case 7: tilemap.SetTile(position, num7); break;
+            case 8: tilemap.SetTile(position, num8); break;
+            case 9: tilemap.SetTile(position, num9); break;
+        }
+    }
+
 }

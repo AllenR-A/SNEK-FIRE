@@ -53,7 +53,7 @@ public class ScoreTileUpdater : MonoBehaviour
     [ContextMenu("Paint")]
     void Paint()
     {
-        tilemap.SetTile(/*insertposition*/, /*insertcharacter*/);
+        tilemap.SetTile(heart1, heartFull);
     }
 
     private void Start()

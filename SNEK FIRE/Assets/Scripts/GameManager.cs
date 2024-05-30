@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int specialBulletsMax = 7;
     [SerializeField] private bool randomTP = false;
     [SerializeField] private bool life = true;
+    [SerializeField] private bool bulletRefill = false;
     public GameObject pauseMenu;
     public GameObject titleScreen;
     public GameObject gameOverMenu;
@@ -63,36 +64,71 @@ public class GameManager : MonoBehaviour
         snakeScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Snake>();
         scoreScript = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
         titleScreen.SetActive(true);
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        length = snakeScript.GetBodyPartCount();
+        score = scoreScript.currentScore;
+        eatNumber = snakeScript.eat;
+
         if (snakeScript.IsAlive()) {
         life = true;
         }
         else {
-        life = false;
+            life = false;
+            //GameOver();
         }
     }
 
-    private void StartGame(){
+    public void UpdateSpawnAndAmmo()
+    {
+        Debug.Log("[UpdateSpawnAndAmmo()] Length: " + length);
+        if (length == 15) { bulletRefill = true; }
 
-    }
-    private void PauseMenu(){
-        pauseMenu.SetActive(true);
-    }
+        int bulletInterval = 5;     // Add 1 bullet (every 5th growth, tho, only past getting length 15)
+        int scrMultiInterval = 8;   // Increase Score Multipier (every 8th growth)
+        int bombInterval = 9;       // SPAWN (every 9th growth)
+        int largeFoodInterval = 10; // SPAWN (every 10th growth)
+        int specialInterval = 15;   // SPAWN (every 15th growth)
 
     private void GameOver(){
         gameOverMenu.SetActive(true);
     }
 
-    public void EndGame(){
-        Application.Quit();
+        if (eatNumber >= lastEatMilestoneBullet + bulletInterval && bulletRefill && fireBullets < fireBulletsMax)
+        {
+            lastEatMilestoneBullet += bulletInterval;                                       // Update the last milestone
+            fireBullets += 1;
+            Debug.Log("Got ammo!");
+        }
+        else if (eatNumber >= lastEatMilestoneScore + scrMultiInterval && scoreMultiplier < scoreMultiplierMax)
+        {
+            lastEatMilestoneScore += scrMultiInterval;                                      // Update the last milestone
+            scoreMultiplier *= 2;                                                           
+            Debug.Log("Increased Score Multiplier!");
+        }
+        else if (eatNumber >= lastEatMilestoneBomb + bombInterval)
+        {
+            lastEatMilestoneBomb += bombInterval;                                           // Update the last milestone
+            Instantiate(bombPrefab, new Vector3(24, 24, 0), Quaternion.identity);
+            Debug.Log("SPAWNED Bomb.");
+        }
+        else if (eatNumber >= lastEatMilestoneLarge + largeFoodInterval)
+        {
+            lastEatMilestoneLarge += largeFoodInterval;                                     // Update the last milestone
+            Instantiate(foodLargePrefab, new Vector3(24, 24, 0), Quaternion.identity);
+            Debug.Log("SPAWNED LARGE.");
+        }
+        else if (eatNumber >= lastEatMilestoneSpecial + specialInterval)
+        {
+            lastEatMilestoneSpecial += specialInterval;                                     // Update the last milestone
+            Instantiate(specialFoodPrefab, new Vector3(24, 24, 0), Quaternion.identity);
+            Debug.Log("SPAWNED SPECIAL.");
+        }
+
     }
 
-    public void MainMenu(){
-        titleScreen.SetActive(true);
-        gameOverMenu.SetActive(false);
-    }
 }

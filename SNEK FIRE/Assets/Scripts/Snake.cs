@@ -42,6 +42,11 @@ public class Snake : MonoBehaviour
     private GameManager gameManager;
     private ScoreManager scoreManager;
 
+    private AudioSource playerAudio;
+    [SerializeField] private AudioClip crash;
+    [SerializeField] private AudioClip shoot;
+    [SerializeField] private AudioClip eating;
+
     //================ Encapsulation ================
     public bool IsAlive() { return alive; }
     public void IsAlive(bool status) { alive = status; }
@@ -57,6 +62,7 @@ public class Snake : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        playerAudio = GetComponent<AudioSource>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
         
@@ -150,6 +156,7 @@ public class Snake : MonoBehaviour
 
     IEnumerator Fire1()
     {
+        playerAudio.PlayOneShot(shoot, 0.75f);                                      //PLAY SFX
         isAttacking = true;                                                         // enable flag to prevent multiple calls
         headAnim.SetTrigger("attack_t");                                            // PLAY ANIMATION
         Instantiate(fireBulletPrefab, firePoint.position, firePoint.rotation);      // spawn fire bullet
@@ -160,6 +167,7 @@ public class Snake : MonoBehaviour
 
     IEnumerator Fire2()
     {
+        playerAudio.PlayOneShot(shoot, 0.75f);                                      //PLAY SFX
         isAttacking = true;                                                         // enable flag to prevent multiple calls
         headAnim.SetTrigger("attack_t");                                            // PLAY ANIMATION
         Instantiate(specialBulletPrefab, firePoint.position, firePoint.rotation);   // spawn special bullet
@@ -274,6 +282,9 @@ public class Snake : MonoBehaviour
             playerAnim.SetBool("death_b", true);                                    // SET DEATH SPRITE FOR EACH BODYPART
         }
         MoveBack();
+        playerAudio.PlayOneShot(crash, 0.75f);                                      //PLAY SFX
+
+        StartCoroutine(DelayENDMenu(2f));
 
     }
 
@@ -365,6 +376,7 @@ public class Snake : MonoBehaviour
 
     private void Grow()
     {
+        playerAudio.PlayOneShot(eating, 0.75f);                                      //PLAY SFX
         eat += 1;                                                                   // count how much has been eaten
         
         GameObject bodypart = Instantiate(this.bodyPrefab);                         // spawn new bodypart (and get transform)
@@ -424,6 +436,11 @@ public class Snake : MonoBehaviour
         Destroy(gO);
     }
 
+    IEnumerator DelayENDMenu(float time)
+    {
+        yield return new WaitForSeconds(time);                  // Wait for animation to end
+        gameManager.GameOver();
+    }
 
     // Draw the overlap box in the editor for debugging
     private void OnDrawGizmos()

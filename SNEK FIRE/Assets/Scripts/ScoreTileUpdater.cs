@@ -48,12 +48,7 @@ public class ScoreTileUpdater : MonoBehaviour
     //Tilemap
     [SerializeField] private Tilemap tilemap;
 
-    private GameManager gameManager;
-
-    void Paint()
-    {
-        tilemap.SetTile(heart1, heartFull);
-    }
+    [SerializeField] private GameManager gameManager;
 
     private void Start()
     {
@@ -79,6 +74,7 @@ public class ScoreTileUpdater : MonoBehaviour
     {
         tilemap.SetTile(heart1, gameManager.IsAlive() ? heartFull : heartEmpty);
     }
+
     private void UpdateLevel()
     {
         int level = gameManager.GetLevel();

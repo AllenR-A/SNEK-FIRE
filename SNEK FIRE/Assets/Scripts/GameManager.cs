@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverMenu;
 
     private Snake snakeScript;
+    private ScoreManager scoreScript;
 
     //================ Encapsulation ================
     public int GetScore() { return score; }
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         snakeScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Snake>();
+        scoreScript = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
         titleScreen.SetActive(true);
     }
 
@@ -52,6 +54,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         length = snakeScript.GetBodyPartCount();
+        score = scoreScript.currentScore;
 
         if (snakeScript.IsAlive()) {
         life = true;

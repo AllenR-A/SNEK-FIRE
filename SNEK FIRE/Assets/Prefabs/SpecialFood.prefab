@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5912246791786537320}
   - component: {fileID: 6144250657644487367}
   - component: {fileID: 6183308219445938080}
-  - component: {fileID: 6339053739544944104}
   - component: {fileID: 8964114103354986339}
   m_Layer: 0
   m_Name: SpecialFood
@@ -132,25 +131,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.69, y: 0.69}
   m_EdgeRadius: 0
---- !u!114 &6339053739544944104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1164081453487902017}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 873b4f769d8d7c9438c5be5cab6565a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  area: {fileID: 0}
-  spawnPosition: {x: 0, y: 0}
-  boxSize: {x: 0, y: 0}
-  boxAngle: 0
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!95 &8964114103354986339
 Animator:
   serializedVersion: 5

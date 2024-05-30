@@ -14,6 +14,7 @@ TagManager:
   - SpawnArea
   - PlayerBody
   - DeadBody
+  - FoodLarge
   layers:
   - Default
   - TransparentFX

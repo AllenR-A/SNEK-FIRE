@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPosition: {x: 0, y: 0}
-  boxSize: {x: 0, y: 0}
+  boxSize: {x: 1, y: 1}
   layerMask:
     serializedVersion: 2
     m_Bits: 8

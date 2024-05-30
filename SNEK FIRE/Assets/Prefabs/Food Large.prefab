@@ -143,3 +143,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05f5ae1892ddde4d8d07e3be480a4ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foodPoints: 15
+  spawnPosition: {x: 0, y: 0}
+  boxSize: {x: 1, y: 1}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8

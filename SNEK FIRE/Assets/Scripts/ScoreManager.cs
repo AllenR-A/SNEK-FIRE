@@ -13,13 +13,13 @@ public class ScoreManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        scoreText.text = "Score: " + currentScore;
+        scoreText.text = "Score: \n" + currentScore.ToString("D7"); ;
     }
 
     public void UpdateScore(int points)
     {
         currentScore += points;
-        scoreText.text = "Score: " + currentScore;
+        scoreText.text = "Score: \n" + currentScore.ToString("D7"); ;
     }
 
     public void HighScoreUpdate()
@@ -33,7 +33,7 @@ public class ScoreManager : MonoBehaviour
                 PlayerPrefs.SetInt("SavedHighScore", currentScore);
             }
 
-            finalScoreText.text = currentScore.ToString();
+            finalScoreText.text = currentScore.ToString("D7");
             highScoreText.text = PlayerPrefs.GetInt("SavedHighScore").ToString();
         }
     }

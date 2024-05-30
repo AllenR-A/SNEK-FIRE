@@ -38,7 +38,7 @@ public class FoodLarge : MonoBehaviour
         spawnPosition = new Vector2(x, y);
         boxSize = new Vector2(1, 1);
 
-        if (foodScript.CanSpawnItem(spawnPosition, boxSize, boxAngle)) { this.transform.position = new Vector3(x, y, 0); }
+        if (foodScript.CanSpawnItem(spawnPosition, boxSize, boxAngle, layerMask)) { this.transform.position = new Vector3(x, y, 0); }
         else RandomLocation();
     }
 

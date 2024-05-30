@@ -17,10 +17,10 @@ public class Food : MonoBehaviour
     public int GetPoints() { return foodPoints; }
     //================================================
 
-    public bool CanSpawnItem(Vector2 position, Vector2 size, float angle)
+    public bool CanSpawnItem(Vector2 position, Vector2 size, float angle, LayerMask lm)
     {
         // Perform the BoxCast
-        RaycastHit2D hit = Physics2D.BoxCast(position, size, angle, Vector2.zero, 0f, layerMask);
+        RaycastHit2D hit = Physics2D.BoxCast(position, size, angle, Vector2.zero, 0f, lm);
         
         // Return true if no collider was hit, false otherwise
         return hit.collider == null;
@@ -44,7 +44,7 @@ public class Food : MonoBehaviour
         spawnPosition = new Vector2(x,y);
         boxSize = new Vector2(1,1);
 
-        if (CanSpawnItem(spawnPosition, boxSize, boxAngle)) {
+        if (CanSpawnItem(spawnPosition, boxSize, boxAngle, layerMask)) {
             this.transform.position = new Vector3(x, y, 0);   //rounded comply within the grid
         } else {
             RandomLocation();

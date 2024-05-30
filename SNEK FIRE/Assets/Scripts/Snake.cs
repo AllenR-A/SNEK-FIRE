@@ -17,14 +17,21 @@ public class Snake : MonoBehaviour
     [SerializeField] private Vector3 tailPositionBeforeMovement;            //Current position of the snake
     [SerializeField] private float movementIntervalForSPEED = .25f;         //[SPEED] Sets how long the interval is for each movement
 
+    //Snake
     private List<GameObject> bodyparts;
     [SerializeField] private GameObject bodyPrefab;
     [SerializeField] private bool alive = true;
 
+    //Bullets
     [SerializeField] private GameObject fireBulletPrefab;
     [SerializeField] private GameObject specialBulletPrefab;
     [SerializeField] private Transform firePoint;
     private bool isAttacking = false;
+
+
+    [SerializeField] private bool canFireRegular = false;                   //Is enabled if GameManager has stock of fire bullets
+    [SerializeField] private bool canFireSpecial = false;                   //Is enabled if GameManager has stock of special bullets
+
 
     private Animator playerAnim;
     private Animator headAnim;
@@ -34,6 +41,10 @@ public class Snake : MonoBehaviour
     public void IsAlive(bool status) { alive = status; }
     public bool IsAttacking() { return isAttacking; }
     public void IsAttacking(bool status) { isAttacking = status; }
+    public bool CanFireRegular() { return canFireRegular; }
+    public void CanFireRegular(bool status) { canFireRegular = status; }
+    public bool CanFireSpecial() { return canFireSpecial; }
+    public void CanFireSpecial(bool status) { canFireSpecial = status; }
     //================================================
 
     private ScoreManager scoreManager;
@@ -100,8 +111,8 @@ public class Snake : MonoBehaviour
             }
         }
 
-        if (fire1Input == 1 && !isAttacking) StartCoroutine(Fire1());               //isAttacking prevents multiple calls (as this is updated every frame)
-        else if (fire2Input == 1 && !isAttacking) StartCoroutine(Fire2());          //isAttacking prevents multiple calls (as this is updated every frame)
+        if (fire1Input == 1 && !isAttacking && canFireRegular) StartCoroutine(Fire1());         //isAttacking prevents multiple calls (as this is updated every frame)
+        else if (fire2Input == 1 && !isAttacking && canFireSpecial) StartCoroutine(Fire2());    //isAttacking prevents multiple calls (as this is updated every frame)
 
     }
     private void Input2() {

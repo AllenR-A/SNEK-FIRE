@@ -15,6 +15,7 @@ TagManager:
   - PlayerBody
   - DeadBody
   - FoodLarge
+  - GameManager
   layers:
   - Default
   - TransparentFX

@@ -19,6 +19,25 @@ public class GameManager : MonoBehaviour
 
     private Snake snakeScript;
 
+    //================ Encapsulation ================
+    public int GetScore() { return score; }
+    public void SetScore(int n) { score = n; }
+    public int GetScoreMultiplier() { return scoreMultiplier; }
+    public void SetScoreMultiplier(int n) { scoreMultiplier = n; }
+    public int GetLength() { return length; }
+    public void SetLength(int n) { length = n; }
+    public int GetFireBullets() { return fireBullets; }
+    public void SetFireBullets(int n) { fireBullets = n; }
+    public int GetFireBulletsMax() { return fireBulletsMax; }
+    public int GetSpecialBullets() { return specialBullets; }
+    public void SetSpecialBullets(int n) { specialBullets = n; }
+    public int GetSpecialBulletsMax() { return specialBulletsMax; }
+    public bool IsTeleportRandom() { return randomTP; }
+    public void IsTeleportRandom(bool n) { randomTP = n; }
+    public bool IsAlive() { return life; }
+    public void IsAlive(bool n) { life = n; }
+    //================================================
+
     // Start is called before the first frame update
     void Start()
     {

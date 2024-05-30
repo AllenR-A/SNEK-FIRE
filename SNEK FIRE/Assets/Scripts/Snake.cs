@@ -20,8 +20,8 @@ public class Snake : MonoBehaviour
     //Snake
     private List<GameObject> bodyparts;
     [SerializeField] private GameObject bodyPrefab;
-    [SerializeField] private bool alive = true;
     [SerializeField] private LayerMask layerMask;                           //set Layer to check against for detecting what the head should avoid
+    [SerializeField] private bool alive = true;
     public int eat;
 
     //Bullets
@@ -72,6 +72,8 @@ public class Snake : MonoBehaviour
     private void Update()
     {
         Input1();                                                                   //Check for inputs every frame
+        if (Input.GetKeyDown(KeyCode.Escape))
+        { gameManager.PauseMenu(); }
     }
 
     private void FixedUpdate()

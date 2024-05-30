@@ -6324,6 +6324,7 @@ MonoBehaviour:
   score: 0
   scoreMultiplier: 0
   length: 0
+  level: 0
   fireBullets: 0
   fireBulletsMax: 24
   specialBullets: 0
@@ -6909,7 +6910,7 @@ MonoBehaviour:
   multiplier1: {x: 20, y: 21, z: 0}
   multiplier2: {x: 21, y: 21, z: 0}
   level1: {x: 21, y: 20, z: 0}
-  tilemap: {fileID: 0}
+  tilemap: {fileID: 29729237}
 --- !u!1001 &8202001839388697592
 PrefabInstance:
   m_ObjectHideFlags: 0

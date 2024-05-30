@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int score;
     [SerializeField] private int scoreMultiplier;
     [SerializeField] private int length;
+    [SerializeField] private int level;
     [SerializeField] private int fireBullets;
     [SerializeField] private int fireBulletsMax = 24;
     [SerializeField] private int specialBullets;
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour
     public void SetScoreMultiplier(int n) { scoreMultiplier = n; }
     public int GetLength() { return length; }
     public void SetLength(int n) { length = n; }
+    public int GetLevel() { return level; }
+    public void SetLevel(int n) { level = n; }
     public int GetFireBullets() { return fireBullets; }
     public void SetFireBullets(int n) { fireBullets = n; }
     public int GetFireBulletsMax() { return fireBulletsMax; }

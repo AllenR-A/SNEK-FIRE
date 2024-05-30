@@ -68,6 +68,7 @@ public class ScoreTileUpdater : MonoBehaviour
     private void UpdateUI()
     {
         UpdateHearts();             //Update Life Status
+        UpdateLevel();              //Update Level
         UpdateSpecialAmmo();        //Update Special Ammo Amount
         UpdateBulletCount();        //Update Regular Ammo Amount
         UpdateMultiplier();         //Update Score Multiplier
@@ -77,6 +78,11 @@ public class ScoreTileUpdater : MonoBehaviour
     private void UpdateHearts()
     {
         tilemap.SetTile(heart1, gameManager.IsAlive() ? heartFull : heartEmpty);
+    }
+    private void UpdateLevel()
+    {
+        int level = gameManager.GetLevel();
+        SetTileForNumber(level1, level);
     }
 
     private void UpdateSpecialAmmo()

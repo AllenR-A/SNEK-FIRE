@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7716608270550443861
+--- !u!1 &3751483418869056439
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4930289720912432797}
-  - component: {fileID: 4811743577355322056}
-  - component: {fileID: 3259423709699061124}
-  - component: {fileID: 924292152996738372}
-  - component: {fileID: -7985710205735987588}
-  m_Layer: 3
-  m_Name: BombBait
-  m_TagString: BombBait
+  - component: {fileID: 8765304684757688324}
+  - component: {fileID: 6366547828990942659}
+  - component: {fileID: 4396236988969654555}
+  - component: {fileID: -3052585046412765247}
+  m_Layer: 0
+  m_Name: Food Large
+  m_TagString: FoodLarge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4930289720912432797
+--- !u!4 &8765304684757688324
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7716608270550443861}
+  m_GameObject: {fileID: 3751483418869056439}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 3, z: 0}
+  m_LocalPosition: {x: 10, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &4811743577355322056
+--- !u!212 &6366547828990942659
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7716608270550443861}
+  m_GameObject: {fileID: 3751483418869056439}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -76,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: -1569809745
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -545130978, guid: 93966d607ba481440ab661377d943657, type: 3}
+  m_Sprite: {fileID: 1462284263, guid: 93966d607ba481440ab661377d943657, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -87,51 +86,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &3259423709699061124
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7716608270550443861}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4695a7ca5f0eaac489ad4755bcbbe95a, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &924292152996738372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7716608270550443861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf64fbcaba9b15b44bddab2164ad5db3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnPosition: {x: 0, y: 0}
-  boxSize: {x: 0, y: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 8
---- !u!61 &-7985710205735987588
+--- !u!61 &4396236988969654555
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7716608270550443861}
+  m_GameObject: {fileID: 3751483418869056439}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -170,3 +131,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.69, y: 0.69}
   m_EdgeRadius: 0
+--- !u!114 &-3052585046412765247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3751483418869056439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d05f5ae1892ddde4d8d07e3be480a4ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class Food : MonoBehaviour
 {
-    private BoxCollider2D area;
     [SerializeField] private int foodPoints;        //How much this food is worth
+
+    //For spawning
+    private BoxCollider2D area;
     [SerializeField] private Vector2 spawnPosition; // Position where you want to spawn the item
     [SerializeField] private Vector2 boxSize;       // Size of the box cast
     private float boxAngle = 0f;                    // Angle of the box cast in degrees
     [SerializeField] private LayerMask layerMask;   // Layer mask to define which layers to check against
 
-    bool CanSpawnItem(Vector2 position, Vector2 size, float angle)
+    public bool CanSpawnItem(Vector2 position, Vector2 size, float angle)
     {
         // Perform the BoxCast
         RaycastHit2D hit = Physics2D.BoxCast(position, size, angle, Vector2.zero, 0f, layerMask);

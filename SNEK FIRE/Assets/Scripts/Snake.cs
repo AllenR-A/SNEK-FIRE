@@ -315,11 +315,15 @@ public class Snake : MonoBehaviour
         if (other.tag == "Wall" && alive) {
             Debug.Log("YOU DIED.");
             Death();
-        } else if (other.tag == "Food"){
+        } else if (other.tag == "Food") {
+            Debug.Log("YOU ATE.");
             scoreManager.UpdateScore(1);
             Grow();
         } else if (other.tag == "PlayerBody" && alive){
             Debug.Log("YOU CRASHED ON YOURSELF.");
+            Death();
+        } else if (other.tag == "BombBait" && alive) {
+            Debug.Log("YOU GOT JEBAITED *BOOM*.");
             Death();
         }
     }

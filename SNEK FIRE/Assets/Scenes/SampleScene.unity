@@ -6531,6 +6531,8 @@ MonoBehaviour:
   fireBulletPrefab: {fileID: 3577417842126513725, guid: 6c7d7cffd4e378940b91c904ab465c50, type: 3}
   specialBulletPrefab: {fileID: 9058972118788965335, guid: 2f659457dc8788740959f4d445eaefad, type: 3}
   firePoint: {fileID: 1919091576}
+  canFireRegular: 0
+  canFireSpecial: 0
 --- !u!95 &1611188118
 Animator:
   serializedVersion: 5

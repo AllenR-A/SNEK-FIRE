@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BombBait : MonoBehaviour
+public class FoodLarge : MonoBehaviour
 {
+    [SerializeField] private int foodPoints = 15;   //How much this food is worth
+
     //For spawning
     private BoxCollider2D area;
     [SerializeField] private Vector2 spawnPosition; // Position where you want to spawn the item
@@ -11,15 +13,16 @@ public class BombBait : MonoBehaviour
     private float boxAngle = 0f;                    // Angle of the box cast in degrees
     [SerializeField] private LayerMask layerMask;   // Layer mask to define which layers to check against
 
-    private Animator bombAnim;
     private Food foodScript;
+
+    //================ Encapsulation ================
+    public int GetPoints() { return foodPoints; }
+    //================================================
 
     // Start is called before the first frame update
     void Start()
     {
         foodScript = GameObject.FindGameObjectWithTag("Food").GetComponent<Food>();
-        bombAnim = GetComponent<Animator>();
-
         area = GameObject.FindGameObjectWithTag("SpawnArea").GetComponent<BoxCollider2D>();
         layerMask = LayerMask.GetMask("Obstacles");
         RandomLocation();
@@ -35,31 +38,16 @@ public class BombBait : MonoBehaviour
         spawnPosition = new Vector2(x, y);
         boxSize = new Vector2(1, 1);
 
-        if (foodScript.CanSpawnItem(spawnPosition, boxSize, boxAngle)) {
-            this.transform.position = new Vector3(x, y, 0);
-            StartCoroutine(Timer(10f));                         // Start timer once spot is found
-        }
+        if (foodScript.CanSpawnItem(spawnPosition, boxSize, boxAngle)) { this.transform.position = new Vector3(x, y, 0); }
         else RandomLocation();
     }
 
-    IEnumerator Timer(float time)
-    {
-        yield return new WaitForSeconds(time);                  // Time is its entire existence
-        StartCoroutine(AnimateAndDestroy());                    // Start destruction
-    }
-
-    IEnumerator AnimateAndDestroy()
-    {
-        bombAnim.SetTrigger("explode_t");                       // PLAY EXPLOSION ANIMATION
-        yield return new WaitForSeconds(.5f);                   // Wait for animation to end
-        Destroy(gameObject);
-    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
             Debug.Log("BOOM.");
-            StartCoroutine(AnimateAndDestroy());                // Start destruction
+            Destroy(gameObject);                // Self Destruct
         }
     }
 }

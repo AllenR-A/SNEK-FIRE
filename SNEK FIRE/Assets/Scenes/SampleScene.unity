@@ -2354,7 +2354,24 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 236446859}
+  m_GameObject: {fileID: 301999645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 148ab13c8bbda1a45a85802c15d520aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentScore: 0
+  scoreText: {fileID: 1924742775}
+  finalScoreText: {fileID: 0}
+  highScoreText: {fileID: 0}
+--- !u!4 &301999647
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301999645}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -8798,17 +8815,19 @@ MonoBehaviour:
   verticalInput: 0
   fire1Input: 0
   fire2Input: 0
-  direction: {x: 1, y: 0}
+  direction: {x: 0, y: 0}
   rotation: {fileID: 0}
   bodyDirection: {x: 0, y: 0}
   tailDirection: {x: 0, y: 0}
   tailPositionBeforeMovement: {x: 0, y: 0, z: 0}
-  movementIntervalForSPEED: 0.24
+  movementIntervalForSPEED: 0.12
   bodyPrefab: {fileID: 4106908797581284867, guid: 5e038a1452b0b1146ae5aa89106636de, type: 3}
   alive: 1
   fireBulletPrefab: {fileID: 3577417842126513725, guid: 6c7d7cffd4e378940b91c904ab465c50, type: 3}
   specialBulletPrefab: {fileID: 9058972118788965335, guid: 2f659457dc8788740959f4d445eaefad, type: 3}
   firePoint: {fileID: 1919091576}
+  canFireRegular: 0
+  canFireSpecial: 0
 --- !u!95 &1611188118
 Animator:
   serializedVersion: 5
@@ -9343,7 +9362,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!60 &1980003961
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -9874,6 +9893,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 1267071500}
+  - {fileID: 1581045013}
   - {fileID: 1230528110}
   - {fileID: 1980003962}
   - {fileID: 1197403571}

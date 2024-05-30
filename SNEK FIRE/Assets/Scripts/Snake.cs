@@ -10,42 +10,43 @@ public class Snake : MonoBehaviour
     [SerializeField] private float fire1Input;
     [SerializeField] private float fire2Input;
 
-    [SerializeField] private Vector2Int direction = Vector2Int.right;       //Direction of head movement (go right by default) [using Vectroe2Int makes sure it sticks to the grid]
+    [SerializeField] private Vector2Int direction = Vector2Int.zero;        //Direction of head movement [using Vectroe2Int makes sure it sticks to the grid]
     [SerializeField] private Transform rotation;                            //Rotation of head
     [SerializeField] private Vector2Int bodyDirection;                      //Direction of Bodypart no.1 (used to prevent the head from colliding with the bodypart following it)
     [SerializeField] private Vector2Int tailDirection;                      //Track tail (last bodypart) direction
     [SerializeField] private Vector3 tailPositionBeforeMovement;            //Current position of the snake
     [SerializeField] private float movementIntervalForSPEED = .25f;         //[SPEED] Sets how long the interval is for each movement
 
+    //Snake
     private List<GameObject> bodyparts;
     [SerializeField] private GameObject bodyPrefab;
     [SerializeField] private bool alive = true;
 
+    //Bullets
     [SerializeField] private GameObject fireBulletPrefab;
     [SerializeField] private GameObject specialBulletPrefab;
     [SerializeField] private Transform firePoint;
     private bool isAttacking = false;
 
+    [SerializeField] private bool canFireRegular = false;                   //Is enabled if GameManager has stock of fire bullets
+    [SerializeField] private bool canFireSpecial = false;                   //Is enabled if GameManager has stock of special bullets
+
     private Animator playerAnim;
     private Animator headAnim;
 
+    //Outside scripts
+    private Food foodScript;
+    private FoodLarge foodLargeScript;
+
     //================ Encapsulation ================
-    public bool IsAlive()
-    {
-        return alive;
-    }
-    public void IsAlive(bool status)
-    {
-        alive = status;
-    }
-    public bool IsAttacking()
-    {
-        return isAttacking;
-    }
-    public void IsAttacking(bool status)
-    {
-        isAttacking = status;
-    }
+    public bool IsAlive() { return alive; }
+    public void IsAlive(bool status) { alive = status; }
+    public bool IsAttacking() { return isAttacking; }
+    public void IsAttacking(bool status) { isAttacking = status; }
+    public bool CanFireRegular() { return canFireRegular; }
+    public void CanFireRegular(bool status) { canFireRegular = status; }
+    public bool CanFireSpecial() { return canFireSpecial; }
+    public void CanFireSpecial(bool status) { canFireSpecial = status; }
     //================================================
     // Start is called before the first frame update
     private void Start()
@@ -86,21 +87,29 @@ public class Snake : MonoBehaviour
         bodyDirection = new Vector2Int((int)body1_Direction.x, (int)body1_Direction.y);
 
         if (verticalInput == 1) {
-            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.down))
-            { direction = Vector2Int.up; }
+            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.down)) {
+                if (bodyDirection == new Vector2Int(0, 8)) direction = Vector2Int.down;         //Keep going down (while body is teleported and moving down => Vector2Int(0,8))
+                else direction = Vector2Int.up;                                                 //Prevent going up (while body is moving down)
+            }          
         } else if (verticalInput == -1) {
-            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.up))
-            { direction = Vector2Int.down; }
+            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.up)) {
+                if (bodyDirection == new Vector2Int(0, -8)) direction = Vector2Int.up;          //Keep going up (while body is teleported and moving up => Vector2Int(0,-8))
+                else direction = Vector2Int.down;                                               //Prevent going down (while body is moving up)
+            }
         } else if(horizontalInput == 1) {
-            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.left))
-            { direction = Vector2Int.right; }
+            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.left)) {
+                if (bodyDirection == new Vector2Int(18, 0)) direction = Vector2Int.left;        //Keep going left (while body is teleported and moving left => Vector2Int(18,0))
+                else direction = Vector2Int.right;                                              //Prevent going right (while body is moving left)
+            }
         } else if (horizontalInput == -1) {
-            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.right))
-            { direction = Vector2Int.left; }
+            if (!(bodyparts.Count > 1 && bodyDirection == Vector2Int.right)) {
+                if (bodyDirection == new Vector2Int(-18, 0)) direction = Vector2Int.right;      //Keep going right (while body is teleported and moving right => Vector2Int(-18,0))
+                else direction = Vector2Int.left;                                               //Prevent going left (while body is moving right)
+            }
         }
 
-        if (fire1Input == 1 && !isAttacking) StartCoroutine(Fire1());               //isAttacking prevents multiple calls (as this is updated every frame)
-        else if (fire2Input == 1 && !isAttacking) StartCoroutine(Fire2());          //isAttacking prevents multiple calls (as this is updated every frame)
+        if (fire1Input == 1 && !isAttacking && canFireRegular) StartCoroutine(Fire1());         //isAttacking prevents multiple calls (as this is updated every frame)
+        else if (fire2Input == 1 && !isAttacking && canFireSpecial) StartCoroutine(Fire2());    //isAttacking prevents multiple calls (as this is updated every frame)
 
     }
     private void Input2() {
@@ -209,7 +218,7 @@ public class Snake : MonoBehaviour
                 );
 
             //Turn Snake Head
-            this.transform.eulerAngles = new Vector3(0, 0, GetAngleFromVector2Int(direction)+90);
+            if (direction != Vector2.zero) { this.transform.eulerAngles = new Vector3(0, 0, GetAngleFromVector2Int(direction) + 90); }
 
             SetTailDirection(tailPositionBeforeMovement);
             Teleport();                                                                         
@@ -243,6 +252,8 @@ public class Snake : MonoBehaviour
             tail.transform.position.y + reverseDirection.y,
             0.0f
             );
+
+        Teleport();
     }
 
     private float GetAngleFromVector2Int(Vector2Int direction)
@@ -280,15 +291,73 @@ public class Snake : MonoBehaviour
 
     }
 
+    public void HandleBodyPartHit(GameObject hitBodyPart, float time)
+    {
+        int hitIndex = bodyparts.IndexOf(hitBodyPart);
+        if (hitIndex != -1)
+        {
+
+            // Destroy all body parts from tail to hitIndex
+            for (int i = bodyparts.Count - 1; i > hitIndex; i--)                    // Don't include the exploded bodypart
+            {
+                playerAnim = bodyparts[i].GetComponent<Animator>();
+                playerAnim.SetBool("death_b", true);                                // SET DEATH SPRITE FOR EACH BODYPART
+                bodyparts[i].tag = "DeadBody";                                      // Change Tags to "DeadBody"
+                bodyparts.RemoveAt(i);                                              // Remove from list (detaches from the snake)
+            }
+            bodyparts.RemoveAt(hitIndex);                                           // remove separately
+
+            Debug.Log("Body parts destroyed starting from index: " + hitIndex);
+            StartCoroutine(DelayDestroy(time, hitBodyPart));
+        }
+    }
+
+    public void HandleBodyPartHitSpecial(GameObject hitBodyPart)
+    {
+        // This one is the same as above. It just doesn't have animations (since that one is already handled by the special bullet).
+        int hitIndex = bodyparts.IndexOf(hitBodyPart);
+        if (hitIndex != -1)
+        {
+            // Destroy all body parts from hitIndex to the end
+            for (int i = bodyparts.Count - 1; i >= hitIndex; i--)
+            {
+                playerAnim = bodyparts[i].GetComponent<Animator>();
+                playerAnim.SetBool("death_b", true);                                // SET DEATH SPRITE FOR EACH BODYPART
+                bodyparts[i].tag = "DeadBody";                                      // Change Tags to "DeadBody"
+                bodyparts.RemoveAt(i);                                              // Remove from list (detaches from the snake)
+            }
+
+            // Optionally, you could add some effect or animation when parts are removed
+            Debug.Log("Body parts destroyed starting from index: " + hitIndex);
+            Destroy(hitBodyPart);
+        }
+    }
+    public int GetBodyPartCount()
+    {
+        return bodyparts.Count;
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Wall" && alive) {
             Debug.Log("YOU DIED.");
             Death();
-        } else if (other.tag == "Food"){
+        } else if (other.tag == "Food") {
+            Debug.Log("YOU ate.");
+            foodScript = other.gameObject.GetComponent<Food>();
+            scoreManager.UpdateScore(foodScript.GetPoints());
             Grow();
-        } else if (other.tag == "PlayerBody" && alive){
+        } else if (other.tag == "FoodLarge") {
+            Debug.Log("YOU ATE.");
+            foodLargeScript = other.gameObject.GetComponent<FoodLarge>();
+            scoreManager.UpdateScore(foodLargeScript.GetPoints());
+            StartCoroutine(GrowTwice(movementIntervalForSPEED));    //set double-growth speed to match snake speed
+        }
+        else if (other.tag == "PlayerBody" && alive){
             Debug.Log("YOU CRASHED ON YOURSELF.");
+            Death();
+        } else if (other.tag == "BombBait" && alive) {
+            Debug.Log("YOU GOT JEBAITED *BOOM*.");
             Death();
         }
     }
@@ -308,5 +377,18 @@ public class Snake : MonoBehaviour
         bodypart.transform.position = newTailPosition;                                        // set transform of new bodypart to the old one (replacing tail-end)
         bodypart.transform.eulerAngles = oldTailRotation;                                     // set rotation of new bodypart to the old one (replacing tail-end)
         bodyparts.Add(bodypart);                                                    // add this to the list of bodyparts
+    }
+
+    IEnumerator GrowTwice(float time)
+    {
+        Grow();
+        yield return new WaitForSeconds(time);                  // Wait for animation to end
+        Grow();
+    }
+
+    IEnumerator DelayDestroy(float time, GameObject gO)
+    {
+        yield return new WaitForSeconds(time);                  // Wait for animation to end
+        Destroy(gO);
     }
 }

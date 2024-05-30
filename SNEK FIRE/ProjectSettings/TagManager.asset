@@ -13,6 +13,9 @@ TagManager:
   - BombBait
   - SpawnArea
   - PlayerBody
+  - DeadBody
+  - FoodLarge
+  - GameManager
   layers:
   - Default
   - TransparentFX

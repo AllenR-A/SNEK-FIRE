@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Food : MonoBehaviour
 {
-    [SerializeField] private int foodPoints;        //How much this food is worth
+    [SerializeField] private int foodPoints = 5;    //How much this food is worth
 
     //For spawning
     private BoxCollider2D area;
@@ -12,6 +12,10 @@ public class Food : MonoBehaviour
     [SerializeField] private Vector2 boxSize;       // Size of the box cast
     private float boxAngle = 0f;                    // Angle of the box cast in degrees
     [SerializeField] private LayerMask layerMask;   // Layer mask to define which layers to check against
+
+    //================ Encapsulation ================
+    public int GetPoints() { return foodPoints; }
+    //================================================
 
     public bool CanSpawnItem(Vector2 position, Vector2 size, float angle)
     {
@@ -25,8 +29,8 @@ public class Food : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        //layerMask = LayerMask.GetMask("Obstacles");
         area = GameObject.FindGameObjectWithTag("SpawnArea").GetComponent<BoxCollider2D>();
+        layerMask = LayerMask.GetMask("Obstacles");
         RandomLocation();
     }
 

@@ -28,13 +28,15 @@ public class Snake : MonoBehaviour
     [SerializeField] private Transform firePoint;
     private bool isAttacking = false;
 
-
     [SerializeField] private bool canFireRegular = false;                   //Is enabled if GameManager has stock of fire bullets
     [SerializeField] private bool canFireSpecial = false;                   //Is enabled if GameManager has stock of special bullets
 
-
     private Animator playerAnim;
     private Animator headAnim;
+
+    //Outside scripts
+    private Food foodScript;
+    private FoodLarge foodLargeScript;
 
     //================ Encapsulation ================
     public bool IsAlive() { return alive; }
@@ -316,10 +318,17 @@ public class Snake : MonoBehaviour
             Debug.Log("YOU DIED.");
             Death();
         } else if (other.tag == "Food") {
-            Debug.Log("YOU ATE.");
-            scoreManager.UpdateScore(1);
+            Debug.Log("YOU ate.");
+            foodScript = other.gameObject.GetComponent<Food>();
+            scoreManager.UpdateScore(foodScript.GetPoints());
             Grow();
-        } else if (other.tag == "PlayerBody" && alive){
+        } else if (other.tag == "FoodLarge") {
+            Debug.Log("YOU ATE.");
+            foodLargeScript = other.gameObject.GetComponent<FoodLarge>();
+            scoreManager.UpdateScore(foodLargeScript.GetPoints());
+            StartCoroutine(GrowTwice(movementIntervalForSPEED));    //set double-growth speed to match snake speed
+        }
+        else if (other.tag == "PlayerBody" && alive){
             Debug.Log("YOU CRASHED ON YOURSELF.");
             Death();
         } else if (other.tag == "BombBait" && alive) {
@@ -343,6 +352,13 @@ public class Snake : MonoBehaviour
         bodypart.transform.position = newTailPosition;                                        // set transform of new bodypart to the old one (replacing tail-end)
         bodypart.transform.eulerAngles = oldTailRotation;                                     // set rotation of new bodypart to the old one (replacing tail-end)
         bodyparts.Add(bodypart);                                                    // add this to the list of bodyparts
+    }
+
+    IEnumerator GrowTwice(float time)
+    {
+        Grow();
+        yield return new WaitForSeconds(time);                  // Wait for animation to end
+        Grow();
     }
 
     IEnumerator DelayDestroy(float time, GameObject gO)

@@ -14,8 +14,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int specialBulletsMax = 7;
     [SerializeField] private bool randomTP = false;
     [SerializeField] private bool life = true;
-     public TextMeshProUGUI gameOverText;
+    //  public TextMeshProUGUI gameOverText;
      public GameObject titleScreen;
+     public GameObject gameOverScreen;
+     public GameObject pauseMenuScreen;
      public bool isGameActive;
 
 
@@ -39,7 +41,7 @@ public class GameManager : MonoBehaviour
         else
         {
             life = false;
-            gameOverText.gameObject.SetActive(true);
+            // gameOverText.gameObject.SetActive(true);
             }
 
     }
@@ -48,6 +50,14 @@ public class GameManager : MonoBehaviour
     {
         titleScreen.SetActive(false);
         isGameActive = true;
-        gameOverText.gameObject.SetActive(false);
+        // gameOverText.gameObject.SetActive(false);
+    }
+
+    public void GameOver(){
+
+    }
+
+    public void PauseMenu(){
+
     }
 }

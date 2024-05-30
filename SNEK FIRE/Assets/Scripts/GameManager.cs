@@ -94,9 +94,6 @@ public class GameManager : MonoBehaviour
         int largeFoodInterval = 10; // SPAWN (every 10th growth)
         int specialInterval = 15;   // SPAWN (every 15th growth)
 
-    private void GameOver(){
-        gameOverMenu.SetActive(true);
-    }
 
         if (eatNumber >= lastEatMilestoneBullet + bulletInterval && bulletRefill && fireBullets < fireBulletsMax)
         {

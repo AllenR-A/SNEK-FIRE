@@ -22,6 +22,13 @@ public class FireBullet : MonoBehaviour
                                                         (if this is done prior to setting velocity, it shoots into the wrong direction)*/
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        if (transform.position.x <= 0 || transform.position.x >= 20 || transform.position.y <= 0|| transform.position.y >= 10)
+        { Destroy(gameObject); }                        // Cleanup of it reaches bounds
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // First collision
